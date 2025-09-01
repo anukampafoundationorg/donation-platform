@@ -37,7 +37,7 @@ const ContentWrapper = styled.div`
 const Title = styled.h1`
   font-size: 36px;
   font-weight: bold;
-  color: #48bb78;
+  color: #f79e31;
   margin-bottom: 24px;
 `;
 
@@ -66,7 +66,7 @@ const PhotoGrid = styled.div`
 `;
 
 const DonateButton = styled(Link)`
-  background-color: #48bb78;
+  background-color: #f79e31;
   color: #ffffff;
   padding: 12px 32px;
   text-decoration: none;
@@ -75,19 +75,19 @@ const DonateButton = styled(Link)`
   font-weight: 600;
   transition: background-color 0.3s;
   &:hover {
-    background-color: #38a169;
+    background-color: #c67e27;
   }
 `;
 
 const BackButton = styled(Link)`
   display: inline-block;
   margin-bottom: 24px;
-  color: #48bb78;
+  color: #f79e31;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
   &:hover {
-    color: #38a169;
+    color: #c67e27;
   }
 `;
 

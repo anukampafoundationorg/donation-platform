@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import cowImage from './assets/cowHero1.jpg'; // Adjust path if inside /src/assets/
+import cowImage from './assets/cowHero1.jpg';
 import { Routes, Route, Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import StoryDetail from './components/StoryDetail';
 import { stories } from './data/stories';
 import trailerVideo from './assets/trailer.mp4';
-// Add imports for 9 cow images (adjust names if different)
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
 import cow3 from './assets/cowimg3.jpeg';
@@ -16,8 +15,12 @@ import cow6 from './assets/cowimg6.jpeg';
 import cow7 from './assets/cowimg7.jpeg';
 import cow8 from './assets/cowimg8.jpeg';
 import cow9 from './assets/cowimg9.jpeg';
+import upiQR from './assets/upi.jpeg';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-// Global Styles to Reset Browser Defaults
+// Global Styles
 const GlobalStyle = createGlobalStyle`
   html, body {
     margin: 0;
@@ -57,9 +60,10 @@ const Container = styled.div`
 `;
 
 const HeroWrapper = styled.div`
-  background: url(${cowImage}) no-repeat center center/cover;
-  background-position: center;
-  background-attachment: fixed;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
 `;
 
 const Header = styled.header`
@@ -68,19 +72,20 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   color: #2d3748;
-  box-shadow: ${props => props.$isScrolled ? '0 4px 12px rgba(74, 85, 104, 0.1)' : '0 2px 4px rgba(74, 85, 104, 0.1)'};
+  box-shadow: ${props => props.$isScrolled ? '0 4px 12px rgba(74, 85, 104, 0.3)' : 'none'};
   position: sticky;
   top: 0;
   z-index: 10000;
   width: 100%;
   margin: 0;
-  background: ${props => props.$isScrolled ? '#ffffff' : 'transparent'};
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  background: #f79e31;
+  transition: box-shadow 0.3s ease;
 `;
 
 const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
+  color: #ffffff;
 `;
 
 const Nav = styled.nav`
@@ -103,17 +108,21 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(HashLink)`
-  color: #2d3748;
+  color: #ffffff;
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s, transform 0.3s;
   &:hover {
-    color: #48bb78;
+    color: #ffffff;
     transform: translateY(-2px);
   }
   @media (max-width: 768px) {
+    color: #f79e31;
     font-size: 18px;
     padding: 10px 0;
+    &:hover {
+      color: #c67e27;
+    }
   }
 `;
 
@@ -124,7 +133,7 @@ const Hamburger = styled.div`
   span {
     width: 25px;
     height: 3px;
-    background: #2d3748;
+    background: #ffffff;
     margin: 2px 0;
     transition: all 0.3s ease-in-out;
   }
@@ -145,47 +154,51 @@ const Hamburger = styled.div`
 `;
 
 const HeroSection = styled.section`
-  min-height: calc(100vh - 64px); /* Adjust for header height */
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 0;
-  padding: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: #2d3748;
-  position: relative;
+  z-index: 5;
 `;
 
 const HeroContent = styled.div`
   max-width: 900px;
   padding: 20px;
   animation: ${fadeIn} 1s ease-out;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
 `;
 
 const HeroTagline = styled.h2`
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 12px;
-  color:white
+  color: white;
 `;
 
 const HeroTitle = styled.h1`
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 16px;
-  color:white;
+  color: white;
 `;
 
 const HeroText = styled.p`
   font-size: 20px;
   margin-bottom: 24px;
-  color : white
+  color: white;
 `;
 
 const HeroButton = styled.a`
-  background-color: #48bb78;
+  background-color: #f79e31;
   color: #ffffff;
   padding: 12px 32px;
   text-decoration: none;
@@ -194,7 +207,7 @@ const HeroButton = styled.a`
   font-weight: 600;
   transition: background-color 0.3s, transform 0.3s;
   &:hover {
-    background-color: #38a169;
+    background-color: #c67e27;
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -212,7 +225,7 @@ const Section = styled.section`
 const Title = styled.h2`
   font-size: 36px;
   font-weight: bold;
-  color: #48bb78;
+  color: #f79e31;
   margin-bottom: 24px;
 `;
 
@@ -221,30 +234,81 @@ const Text = styled.p`
   color: #2d3748;
   max-width: 800px;
   margin: 0 auto 32px;
-  transition: none; // Prevent any transitions
+  transition: none;
 `;
 
+// Video controls components (defined before VideoWrapper)
+const ControlsContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  transition: opacity 0.3s;
+  @media (max-width: 768px) {
+    display: flex;
+  }
+`;
+
+const ProgressBar = styled.div`
+  flex: 1;
+  height: 5px;
+  background: #ddd;
+  margin: 0 10px;
+  position: relative;
+  cursor: pointer;
+`;
+
+const Progress = styled.div`
+  height: 100%;
+  background: #f79e31;
+  width: ${props => (props.$progress / props.$duration) * 100}%;
+`;
+
+const MuteButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+`;
+
+const VolumeSlider = styled.input.attrs({ type: 'range', min: 0, max: 1, step: 0.01 })`
+  width: 100px;
+`;
+
+const PlayPauseButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+`;
+
+// Video wrapper (defined after controls)
 const VideoWrapper = styled.div`
-  width: 1000px;
-  height: 400px;
+  width: ${props => props.$width};
+  height: ${props => props.$height};
   max-width: 100%;
   margin: 0 auto;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(74, 85, 104, 0.1);
   overflow: hidden;
   position: relative;
-  padding-top: 56.25%; // 16:9 aspect ratio (9/16 = 0.5625)
-  @media (max-width: 1024px) {
-    width: 100%;
+  &:hover ${ControlsContainer} {
+    display: flex;
   }
 `;
 
 const VideoElement = styled.video`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 `;
 
 const GalleryGrid = styled.div`
@@ -323,7 +387,7 @@ const ButtonGroup = styled.div`
 `;
 
 const DonateButton = styled.button`
-  background-color: #48bb78;
+  background-color: #f79e31;
   color: #ffffff;
   padding: 12px 32px;
   margin: 8px;
@@ -337,7 +401,7 @@ const DonateButton = styled.button`
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(74, 85, 104, 0.3);
-    background-color: #38a169;
+    background-color: #c67e27;
   }
 `;
 
@@ -362,8 +426,8 @@ const Input = styled.input`
   transition: border-color 0.3s ease, box-shadow 0.3s;
   &:focus {
     outline: none;
-    border-color: #48bb78;
-    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+    border-color: #f79e31;
+    box-shadow: 0 0 0 3px rgba(247, 158, 49, 0.2);
   }
   &::placeholder {
     color: #a0aec0;
@@ -372,7 +436,7 @@ const Input = styled.input`
 
 const SubmitButton = styled.button`
   width: 100%;
-  background-color: #48bb78;
+  background-color: #f79e31;
   color: #ffffff;
   padding: 12px;
   border: none;
@@ -385,7 +449,7 @@ const SubmitButton = styled.button`
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(74, 85, 104, 0.3);
-    background-color: #38a169;
+    background-color: #c67e27;
   }
 `;
 
@@ -408,17 +472,6 @@ const MissionCard = styled.div`
   color: #2d3748;
 `;
 
-// const CardTitle = styled.h3`
-//   font-size: 20px;
-//   font-weight: 600;
-//   color: #48bb78;
-//   margin-bottom: 8px;
-// `;
-
-// const CardText = styled.p`
-//   color: #2d3748;
-// `;
-
 const Footer = styled.footer`
   background-color: #f4f4f3;
   color: #2d3748;
@@ -429,7 +482,7 @@ const Footer = styled.footer`
 `;
 
 const FooterLink = styled.a`
-  color: #48bb78;
+  color: #f79e31;
   margin: 0 16px;
   text-decoration: none;
   transition: text-decoration 0.3s;
@@ -438,7 +491,6 @@ const FooterLink = styled.a`
   }
 `;
 
-// Add new styled components for stories section after GalleryOverlay
 const StoriesSection = styled.section`
   padding: 64px 20px;
   width: 100%;
@@ -451,7 +503,7 @@ const StoriesSection = styled.section`
 const StoriesTitle = styled.h2`
   font-size: 36px;
   font-weight: bold;
-  color: #48bb78;
+  color: #f79e31;
   margin-bottom: 24px;
 `;
 
@@ -496,7 +548,7 @@ const CardImage = styled.img.attrs({ loading: 'lazy' })`
 const CardTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
-  color: #48bb78;
+  color: #f79e31;
   margin-bottom: 8px;
 `;
 
@@ -506,21 +558,20 @@ const CardText = styled.p`
 `;
 
 const ReadMore = styled(Link)`
-  color: #48bb78;
+  color: #f79e31;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
   &:hover {
-    color: #38a169;
+    color: #c67e27;
   }
 `;
 
-// Add styled component for BackToTop
 const BackToTop = styled.button`
   position: fixed;
   bottom: 40px;
   right: 40px;
-  background-color: #48bb78;
+  background-color: #f79e31;
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -535,78 +586,6 @@ const BackToTop = styled.button`
   }
 `;
 
-// Styled components for controls
-const ControlsContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  display: ${props => props.$visible ? 'flex' : 'none'};
-  align-items: center;
-  justify-content: space-between;
-  transition: opacity 0.3s;
-  @media (max-width: 768px) {
-    display: flex; // Always show on mobile
-    opacity: ${props => props.$visible ? 1 : 0.5}; // Semi-visible when not active
-  }
-`;
-
-const ProgressBar = styled.div`
-  flex: 1;
-  height: 5px;
-  background: #ddd;
-  margin: 0 10px;
-  position: relative;
-  cursor: pointer;
-`;
-
-const Progress = styled.div`
-  height: 100%;
-  background: #48bb78;
-  width: ${props => (props.$progress / props.$duration) * 100}%;
-`;
-
-const MuteButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-`;
-
-const VolumeSlider = styled.input.attrs({ type: 'range', min: 0, max: 1, step: 0.01 })`
-  width: 100px;
-`;
-
-// Add state
-// const [isPlaying, setIsPlaying] = useState(true); // Moved inside App
-
-// Add function
-// const togglePlay = () => { // Moved inside App
-//   if (isPlaying) {
-//     videoRef.current.pause();
-//   } else {
-//     videoRef.current.play();
-//   }
-//   setIsPlaying(!isPlaying);
-// };
-
-// Add styled component after MuteButton
-const PlayPauseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-  margin-right: 10px;
-`;
-
-// Add state for modal
-// const [selectedImage, setSelectedImage] = useState(null);
-
-// Add Modal styled component after other styles
 const Modal = styled.div`
   position: fixed;
   top: 0;
@@ -637,24 +616,179 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+const heroImages = [cowImage, cow1, cow2, cow3, cow4];
+
+const HeroSlide = styled.div`
+  height: 100vh !important;
+  background: url(${props => props.image}) no-repeat center center/cover;
+  background-position: center;
+`;
+
+// Payment option components
+const PaymentOptionsContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
+  animation: ${slideIn} 0.5s ease-in-out;
+`;
+
+const PaymentHeader = styled.div`
+  text-align: center;
+  margin-bottom: 24px;
+`;
+
+const DonationSummary = styled.div`
+  background: #f4f4f3;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+`;
+
+const PaymentMethodGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const PaymentMethodCard = styled.div`
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: #f79e31;
+    transform: translateY(-2px);
+  }
+`;
+
+const QRCodeContainer = styled.div`
+  width: 200px;
+  height: 200px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px auto;
+  overflow: hidden;
+`;
+
+const QRCodeImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const BackButton = styled.button`
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background: #cbd5e0;
+  }
+`;
+
+const PaymentMethodSelector = styled.div`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const PaymentMethodButton = styled.button`
+  padding: 12px 24px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  
+  &:hover {
+    border-color: #f79e31;
+    color: #f79e31;
+  }
+  
+  ${props => props.$active && `
+    border-color: #f79e31;
+    background: #f79e31;
+    color: white;
+  `}
+`;
+
+const BankDetailsContainer = styled.div`
+  background: #f8f9fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 500px;
+`;
+
+const BankDetailRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const BankDetailLabel = styled.span`
+  font-weight: 600;
+  color: #4a5568;
+  min-width: 120px;
+`;
+
+const BankDetailValue = styled.span`
+  color: #2d3748;
+  font-family: monospace;
+  font-size: 14px;
+`;
+
 // React Component
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  // Placeholder for YouTube video ID (replace '3f2Evvxke9s' with your video ID)
   const [showBackToTop, setShowBackToTop] = useState(false);
   const videoRef = useRef(null);
-  const [showControls, setShowControls] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [videoDimensions, setVideoDimensions] = useState({ width: '100%', height: 'auto' });
+  const [donationData, setDonationData] = useState(null);
+  const [selectedAmount, setSelectedAmount] = useState('');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100); // Change background after scrolling past 100px
+      setIsScrolled(window.scrollY > 100);
       setShowBackToTop(window.scrollY > 300);
     };
     window.addEventListener('scroll', handleScroll);
@@ -665,20 +799,33 @@ function App() {
     const video = videoRef.current;
     if (!video) return;
 
+    const updateDimensions = () => {
+      setVideoDimensions({
+        width: `${video.videoWidth}px`,
+        height: `${video.videoHeight}px`
+      });
+    };
+
     const updateTime = () => setCurrentTime(video.currentTime);
     const updateDuration = () => setDuration(video.duration);
 
+    video.addEventListener('loadedmetadata', updateDimensions);
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('loadedmetadata', updateDuration);
 
+    if (video.videoWidth && video.videoHeight) {
+      updateDimensions();
+    }
+
     return () => {
+      video.removeEventListener('loadedmetadata', updateDimensions);
       video.removeEventListener('timeupdate', updateTime);
       video.removeEventListener('loadedmetadata', updateDuration);
     };
   }, []);
 
   const togglePlay = (e) => {
-    e?.stopPropagation(); // Stop if event is passed
+    e?.stopPropagation();
     if (videoRef.current.paused) {
       videoRef.current.play();
       setIsPlaying(true);
@@ -692,7 +839,6 @@ function App() {
     setIsNavOpen(!isNavOpen);
   };
 
-  // Functions for controls
   const handleSeek = (e) => {
     const seekTime = (e.nativeEvent.offsetX / e.target.clientWidth) * duration;
     videoRef.current.currentTime = seekTime;
@@ -711,10 +857,34 @@ function App() {
     setIsMuted(newMuted);
     videoRef.current.muted = newMuted;
     if (newMuted) setVolume(0);
-    else setVolume(1); // Reset to full if unmuting
+    else setVolume(1);
   };
 
-  // Array of 9 gallery images with captions
+  const handleDonationSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const amount = formData.get('amount') || selectedAmount;
+    const name = formData.get('name');
+    
+    if (amount && name) {
+      setDonationData({ amount, name });
+    }
+  };
+
+  const handleAmountSelect = (amount) => {
+    setSelectedAmount(amount);
+  };
+
+  const resetDonationForm = () => {
+    setDonationData(null);
+    setSelectedAmount('');
+    setSelectedPaymentMethod(null);
+  };
+
+  const handlePaymentMethodSelect = (method) => {
+    setSelectedPaymentMethod(method);
+  };
+
   const galleryImages = [
     { src: cow1, alt: 'खेत में गायें', caption: 'शांतिपूर्ण खेत' },
     { src: cow2, alt: 'गायों की देखभाल', caption: 'प्यार भरी देखभाल' },
@@ -735,6 +905,23 @@ function App() {
           <Route path="/" element={
             <>
               <HeroWrapper>
+                <Slider
+                  dots={true}
+                  infinite={true}
+                  speed={500}
+                  slidesToShow={1}
+                  slidesToScroll={1}
+                  autoplay={true}
+                  autoplaySpeed={3000}
+                  cssEase="linear"
+                  arrows={false}
+                  pauseOnHover={false}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}
+                >
+                  {heroImages.map((img, index) => (
+                    <HeroSlide key={index} image={img} />
+                  ))}
+                </Slider>
                 <Header $isScrolled={isScrolled}>
                   <Logo>गौशाला आश्रय</Logo>
                   <Hamburger $isOpen={isNavOpen} onClick={toggleNav}>
@@ -769,7 +956,8 @@ function App() {
                   गौशाला आश्रय एक गैर-लाभकारी संगठन है जो गायों के कल्याण के लिए समर्पित है। 2010 में स्थापित, हमने सड़कों से 500 से अधिक गायों को बचाया है, उन्हें सुरक्षित आश्रय, पौष्टिक भोजन और पशु चिकित्सा देखभाल प्रदान की है। गायें हमारी संस्कृति में विशेष स्थान रखती हैं, जो मातृत्व और समृद्धि का प्रतीक हैं। हम करुणामय देखभाल और टिकाऊ खेती प्रथाओं में विश्वास करते हैं।
                 </Text>
                 <VideoWrapper
-                  onClick={() => setShowControls(!showControls)}
+                  $width={videoDimensions.width}
+                  $height={videoDimensions.height}
                 >
                   <VideoElement 
                     ref={videoRef}
@@ -781,7 +969,7 @@ function App() {
                     volume={volume}
                     onClick={(e) => togglePlay(e)}
                   />
-                  <ControlsContainer $visible={showControls}>
+                  <ControlsContainer>
                     <PlayPauseButton onClick={togglePlay}>{isPlaying ? '⏸️' : '▶️'}</PlayPauseButton>
                     <MuteButton onClick={toggleMute}>{isMuted ? '🔇' : '🔊'}</MuteButton>
                     <ProgressBar onClick={handleSeek}>
@@ -796,21 +984,152 @@ function App() {
                 <Text>
                   प्रत्येक योगदान मायने रखता है। भोजन, दवा और आश्रय प्रदान करने में हमारी मदद करें। एक राशि चुनें या अपनी राशि दर्ज करें।
                 </Text>
-                <ButtonGroup>
-                  <DonateButton>₹500</DonateButton>
-                  <DonateButton>₹1000</DonateButton>
-                  <DonateButton>₹2000</DonateButton>
-                  <DonateButton>कस्टम</DonateButton>
-                </ButtonGroup>
-                <Form>
-                  <Input type="text" placeholder="राशि दर्ज करें" required />
-                  <Input type="email" placeholder="आपका ईमेल" required />
-                  <SubmitButton $bg="#48bb78" $color="white" $hoverBg="#38a169">सुरक्षित रूप से दान करें</SubmitButton>
-                </Form>
+                
+                {!donationData ? (
+                  <>
+                    <ButtonGroup>
+                      <DonateButton 
+                        onClick={() => handleAmountSelect('500')}
+                        style={{ backgroundColor: selectedAmount === '500' ? '#c67e27' : '#f79e31' }}
+                      >
+                        ₹500
+                      </DonateButton>
+                      <DonateButton 
+                        onClick={() => handleAmountSelect('1000')}
+                        style={{ backgroundColor: selectedAmount === '1000' ? '#c67e27' : '#f79e31' }}
+                      >
+                        ₹1000
+                      </DonateButton>
+                      <DonateButton 
+                        onClick={() => handleAmountSelect('2000')}
+                        style={{ backgroundColor: selectedAmount === '2000' ? '#c67e27' : '#f79e31' }}
+                      >
+                        ₹2000
+                      </DonateButton>
+                      <div style={{ margin: '8px', display: 'inline-block' }}>
+                        <Input 
+                          type="number" 
+                          placeholder="कस्टम राशि"
+                          value={selectedAmount && !['500', '1000', '2000'].includes(selectedAmount) ? selectedAmount : ''}
+                          onChange={(e) => handleAmountSelect(e.target.value)}
+                          style={{ 
+                            width: '150px', 
+                            margin: '0',
+                            border: selectedAmount && !['500', '1000', '2000'].includes(selectedAmount) ? '2px solid #f79e31' : '1px solid #4a5568'
+                          }}
+                        />
+                      </div>
+                    </ButtonGroup>
+                    <Form as="form" onSubmit={handleDonationSubmit}>
+                      <Input 
+                        type="text" 
+                        name="name"
+                        placeholder="आपका नाम" 
+                        required 
+                      />
+                      <SubmitButton type="submit">आगे बढ़ें</SubmitButton>
+                    </Form>
+                  </>
+                ) : (
+                  <PaymentOptionsContainer>
+                    <PaymentHeader>
+                      <h3 style={{ color: '#f79e31', marginBottom: '8px' }}>भुगतान विधि चुनें</h3>
+                    </PaymentHeader>
+                    
+                    <DonationSummary>
+                      <p><strong>राशि:</strong> ₹{donationData.amount}</p>
+                      <p><strong>नाम:</strong> {donationData.name}</p>
+                    </DonationSummary>
+                    
+                    <PaymentMethodSelector>
+                      <PaymentMethodButton
+                        $active={selectedPaymentMethod === 'upi'}
+                        onClick={() => handlePaymentMethodSelect('upi')}
+                      >
+                        UPI Payment
+                      </PaymentMethodButton>
+                      <PaymentMethodButton
+                        $active={selectedPaymentMethod === 'neft'}
+                        onClick={() => handlePaymentMethodSelect('neft')}
+                      >
+                        NEFT/Bank Transfer
+                      </PaymentMethodButton>
+                    </PaymentMethodSelector>
+                    
+                    {selectedPaymentMethod === 'upi' && (
+                      <div style={{ textAlign: 'center' }}>
+                        <h4 style={{ color: '#f79e31', marginBottom: '16px' }}>UPI भुगतान</h4>
+                        <QRCodeContainer>
+                          <QRCodeImage src={upiQR} alt="UPI QR Code" />
+                        </QRCodeContainer>
+                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+                          QR कोड स्कैन करें और भुगतान करें
+                        </p>
+                        <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginBottom: '24px', lineHeight: '1.5' }}>
+                          कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
+                          <strong>anukampafoundation.org@gmail.com</strong>
+                        </p>
+                      </div>
+                    )}
+                    
+                    {selectedPaymentMethod === 'neft' && (
+                      <div>
+                        <h4 style={{ color: '#f79e31', marginBottom: '16px', textAlign: 'center' }}>Bank Account Details</h4>
+                        <BankDetailsContainer>
+                          <BankDetailRow>
+                            <BankDetailLabel>Account Name:</BankDetailLabel>
+                            <BankDetailValue>Anukampa Foundation</BankDetailValue>
+                          </BankDetailRow>
+                          <BankDetailRow>
+                            <BankDetailLabel>Account No:</BankDetailLabel>
+                            <BankDetailValue>50200066388443</BankDetailValue>
+                          </BankDetailRow>
+                          <BankDetailRow>
+                            <BankDetailLabel>IFSC Code:</BankDetailLabel>
+                            <BankDetailValue>HDFC0004249</BankDetailValue>
+                          </BankDetailRow>
+                          <BankDetailRow>
+                            <BankDetailLabel>Bank Branch:</BankDetailLabel>
+                            <BankDetailValue>HDFC Bank Ujjain, Nikas Choraha</BankDetailValue>
+                          </BankDetailRow>
+                          <BankDetailRow>
+                            <BankDetailLabel>PAN No:</BankDetailLabel>
+                            <BankDetailValue>AAVCA8784D</BankDetailValue>
+                          </BankDetailRow>
+                        </BankDetailsContainer>
+                        <p style={{ fontSize: '14px', color: '#666', textAlign: 'center', marginTop: '16px' }}>
+                          कृपया ऊपर दिए गए बैंक विवरण का उपयोग करके राशि ट्रांसफर करें
+                        </p>
+                        <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginTop: '16px', lineHeight: '1.5', textAlign: 'center' }}>
+                          कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
+                          <strong>anukampafoundation.org@gmail.com</strong>
+                        </p>
+                      </div>
+                    )}
+                    
+                    <div style={{ textAlign: 'center', marginTop: '24px' }}>
+                      <BackButton onClick={resetDonationForm}>
+                        वापस जाएं
+                      </BackButton>
+                    </div>
+                  </PaymentOptionsContainer>
+                )}
+                
                 <Text style={{ fontSize: '14px', marginTop: '24px' }}>
                   (नोट: यह एक प्लेसहोल्डर फॉर्म है; उत्पादन में स्ट्राइप जैसे पेमेंट गेटवे के साथ एकीकृत करें।)
                 </Text>
               </DonateSection>
+              <Section id="gallery">
+                <Title>गैलरी</Title>
+                <GalleryGrid>
+                  {galleryImages.map((image, index) => (
+                    <GalleryItem key={index} onClick={() => setSelectedImage(image.src)}>
+                      <GalleryImage src={image.src} alt={image.alt} />
+                      <GalleryOverlay>{image.caption}</GalleryOverlay>
+                    </GalleryItem>
+                  ))}
+                </GalleryGrid>
+              </Section>
               <Section id="mission" bg="#f4f4f3">
                 <Title>हमारा मिशन</Title>
                 <Text>
@@ -831,7 +1150,7 @@ function App() {
                   </MissionCard>
                 </MissionGrid>
               </Section>
-              <StoriesSection id="stories">
+              {/* <StoriesSection id="stories">
                 <StoriesTitle>आशा की कहानियाँ</StoriesTitle>
                 <StoriesSubtitle>हर गौ की अपनी कहानी है, जो हमें प्रेरित करती है।</StoriesSubtitle>
                 <StoriesGrid>
@@ -844,25 +1163,14 @@ function App() {
                     </StoryCard>
                   ))}
                 </StoriesGrid>
-              </StoriesSection>
-              <Section id="gallery">
-                <Title>गैलरी</Title>
-                <GalleryGrid>
-                  {galleryImages.map((image, index) => (
-                    <GalleryItem key={index} onClick={() => setSelectedImage(image.src)}>
-                      <GalleryImage src={image.src} alt={image.alt} />
-                      <GalleryOverlay>{image.caption}</GalleryOverlay>
-                    </GalleryItem>
-                  ))}
-                </GalleryGrid>
-              </Section>
+              </StoriesSection> */}
               <Section id="contact" bg="#f4f4f3">
                 <Title>संपर्क करें</Title>
                 <Text>कोई प्रश्न हैं? हमसे संपर्क करें!</Text>
                 <Form>
                   <Input type="text" placeholder="आपका नाम" />
                   <Input type="email" placeholder="आपका ईमेल" />
-                  <SubmitButton $bg="#48bb78" $color="white" $hoverBg="#38a169">संदेश भेजें</SubmitButton>
+                  <SubmitButton>संदेश भेजें</SubmitButton>
                 </Form>
               </Section>
             </>
