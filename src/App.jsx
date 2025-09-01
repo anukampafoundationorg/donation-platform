@@ -5,7 +5,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import StoryDetail from './components/StoryDetail';
 import { stories } from './data/stories';
-import trailerVideo from './assets/trailer.mp4';
+
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
 import cow3 from './assets/cowimg3.jpeg';
@@ -78,14 +78,15 @@ const Header = styled.header`
   z-index: 10000;
   width: 100%;
   margin: 0;
-  background: #f79e31;
-  transition: box-shadow 0.3s ease;
+  background: ${props => props.$isScrolled ? '#f79e31' : 'transparent'};
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 `;
 
 const Logo = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
+  font-size: 32px;
+  font-weight: 900;
+  color: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
+  transition: color 0.3s ease;
 `;
 
 const Nav = styled.nav`
@@ -108,17 +109,19 @@ const Nav = styled.nav`
 `;
 
 const NavLink = styled(HashLink)`
-  color: #ffffff;
+  color: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
   text-decoration: none;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
   transition: color 0.3s, transform 0.3s;
   &:hover {
-    color: #ffffff;
+    color: ${props => props.$isScrolled ? '#ffffff' : '#c67e27'};
     transform: translateY(-2px);
   }
   @media (max-width: 768px) {
     color: #f79e31;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 700;
     padding: 10px 0;
     &:hover {
       color: #c67e27;
@@ -131,10 +134,10 @@ const Hamburger = styled.div`
   flex-direction: column;
   cursor: pointer;
   span {
-    width: 25px;
-    height: 3px;
-    background: #ffffff;
-    margin: 2px 0;
+    width: 28px;
+    height: 4px;
+    background: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
+    margin: 3px 0;
     transition: all 0.3s ease-in-out;
   }
   @media (max-width: 768px) {
@@ -142,13 +145,13 @@ const Hamburger = styled.div`
   }
   ${props => props.$isOpen && `
     span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(6px, 6px);
     }
     span:nth-child(2) {
       opacity: 0;
     }
     span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -7px);
+      transform: rotate(-45deg) translate(8px, -8px);
     }
   `}
 `;
@@ -172,9 +175,6 @@ const HeroContent = styled.div`
   max-width: 900px;
   padding: 20px;
   animation: ${fadeIn} 1s ease-out;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
 `;
 
 const HeroTagline = styled.h2`
@@ -182,6 +182,7 @@ const HeroTagline = styled.h2`
   font-weight: bold;
   margin-bottom: 12px;
   color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 `;
 
 const HeroTitle = styled.h1`
@@ -189,12 +190,22 @@ const HeroTitle = styled.h1`
   font-weight: bold;
   margin-bottom: 16px;
   color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 `;
 
 const HeroText = styled.p`
   font-size: 20px;
   margin-bottom: 24px;
   color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+`;
+
+const HighlightedWord = styled.span`
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  backdrop-filter: blur(2px);
 `;
 
 const HeroButton = styled.a`
@@ -237,78 +248,22 @@ const Text = styled.p`
   transition: none;
 `;
 
-// Video controls components (defined before VideoWrapper)
-const ControlsContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 10px;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  transition: opacity 0.3s;
-  @media (max-width: 768px) {
-    display: flex;
-  }
-`;
-
-const ProgressBar = styled.div`
-  flex: 1;
-  height: 5px;
-  background: #ddd;
-  margin: 0 10px;
-  position: relative;
-  cursor: pointer;
-`;
-
-const Progress = styled.div`
-  height: 100%;
-  background: #f79e31;
-  width: ${props => (props.$progress / props.$duration) * 100}%;
-`;
-
-const MuteButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-`;
-
-const VolumeSlider = styled.input.attrs({ type: 'range', min: 0, max: 1, step: 0.01 })`
-  width: 100px;
-`;
-
-const PlayPauseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
-  margin-right: 10px;
-`;
-
-// Video wrapper (defined after controls)
-const VideoWrapper = styled.div`
-  width: ${props => props.$width};
-  height: ${props => props.$height};
-  max-width: 100%;
+// YouTube iframe components
+const YouTubeWrapper = styled.div`
+  width: 100%;
+  max-width: 800px;
+  height: 500px;
   margin: 0 auto;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(74, 85, 104, 0.1);
   overflow: hidden;
   position: relative;
-  &:hover ${ControlsContainer} {
-    display: flex;
-  }
 `;
 
-const VideoElement = styled.video`
+const YouTubeIframe = styled.iframe`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  border: none;
 `;
 
 const GalleryGrid = styled.div`
@@ -774,14 +729,7 @@ function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const videoRef = useRef(null);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [videoDimensions, setVideoDimensions] = useState({ width: '100%', height: 'auto' });
   const [donationData, setDonationData] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -795,69 +743,8 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const updateDimensions = () => {
-      setVideoDimensions({
-        width: `${video.videoWidth}px`,
-        height: `${video.videoHeight}px`
-      });
-    };
-
-    const updateTime = () => setCurrentTime(video.currentTime);
-    const updateDuration = () => setDuration(video.duration);
-
-    video.addEventListener('loadedmetadata', updateDimensions);
-    video.addEventListener('timeupdate', updateTime);
-    video.addEventListener('loadedmetadata', updateDuration);
-
-    if (video.videoWidth && video.videoHeight) {
-      updateDimensions();
-    }
-
-    return () => {
-      video.removeEventListener('loadedmetadata', updateDimensions);
-      video.removeEventListener('timeupdate', updateTime);
-      video.removeEventListener('loadedmetadata', updateDuration);
-    };
-  }, []);
-
-  const togglePlay = (e) => {
-    e?.stopPropagation();
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      setIsPlaying(true);
-    } else {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
-  };
-
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
-  };
-
-  const handleSeek = (e) => {
-    const seekTime = (e.nativeEvent.offsetX / e.target.clientWidth) * duration;
-    videoRef.current.currentTime = seekTime;
-  };
-
-  const handleVolumeChange = (e) => {
-    const newVolume = e.target.value;
-    setVolume(newVolume);
-    videoRef.current.volume = newVolume;
-    setIsMuted(newVolume === 0);
-  };
-
-  const toggleMute = (e) => {
-    e.stopPropagation();
-    const newMuted = !isMuted;
-    setIsMuted(newMuted);
-    videoRef.current.muted = newMuted;
-    if (newMuted) setVolume(0);
-    else setVolume(1);
   };
 
   const handleDonationSubmit = (e) => {
@@ -923,28 +810,32 @@ function App() {
                   ))}
                 </Slider>
                 <Header $isScrolled={isScrolled}>
-                  <Logo>गौशाला आश्रय</Logo>
-                  <Hamburger $isOpen={isNavOpen} onClick={toggleNav}>
+                  <Logo $isScrolled={isScrolled}>Anukampa</Logo>
+                  <Hamburger $isOpen={isNavOpen} $isScrolled={isScrolled} onClick={toggleNav}>
                     <span></span>
                     <span></span>
                     <span></span>
                   </Hamburger>
                   <Nav $isOpen={isNavOpen}>
-                    <NavLink to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
-                    <NavLink to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
-                    <NavLink to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
-                    <NavLink to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
-                    <NavLink to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
-                    <NavLink to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
-                    <NavLink to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                   </Nav>
                 </Header>
                 <HeroSection id="home">
                   <HeroContent>
-                    <HeroTagline>अनुकम्पा</HeroTagline>
-                    <HeroTitle>गायों, बुजुर्गों और मानवता के लिए करुणा</HeroTitle>
+                    <HeroTagline>
+                      <HighlightedWord>अनुकम्पा</HighlightedWord>
+                    </HeroTagline>
+                    <HeroTitle>
+                      <HighlightedWord>गायों,</HighlightedWord> <HighlightedWord>बुजुर्गों</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>मानवता</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>लिए</HighlightedWord> <HighlightedWord>करुणा</HighlightedWord>
+                    </HeroTitle>
                     <HeroText>
-                      गाय बचाव, बुजुर्गों की देखभाल और समुदायिक कल्याण कार्यक्रमों के माध्यम से करुणा फैलाने में हमारे साथ जुड़ें जो प्रेम के साथ जीवन बदलते हैं।
+                      <HighlightedWord>गाय</HighlightedWord> <HighlightedWord>बचाव,</HighlightedWord> <HighlightedWord>बुजुर्गों</HighlightedWord> <HighlightedWord>की</HighlightedWord> <HighlightedWord>देखभाल</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>समुदायिक</HighlightedWord> <HighlightedWord>कल्याण</HighlightedWord> <HighlightedWord>कार्यक्रमों</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>माध्यम</HighlightedWord> <HighlightedWord>से</HighlightedWord> <HighlightedWord>करुणा</HighlightedWord> <HighlightedWord>फैलाने</HighlightedWord> <HighlightedWord>में</HighlightedWord> <HighlightedWord>हमारे</HighlightedWord> <HighlightedWord>साथ</HighlightedWord> <HighlightedWord>जुड़ें</HighlightedWord> <HighlightedWord>जो</HighlightedWord> <HighlightedWord>प्रेम</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>साथ</HighlightedWord> <HighlightedWord>जीवन</HighlightedWord> <HighlightedWord>बदलते</HighlightedWord> <HighlightedWord>हैं।</HighlightedWord>
                     </HeroText>
                     <HeroButton href="#donate">अब दान करें</HeroButton>
                   </HeroContent>
@@ -955,29 +846,13 @@ function App() {
                 <Text>
                   गौशाला आश्रय एक गैर-लाभकारी संगठन है जो गायों के कल्याण के लिए समर्पित है। 2010 में स्थापित, हमने सड़कों से 500 से अधिक गायों को बचाया है, उन्हें सुरक्षित आश्रय, पौष्टिक भोजन और पशु चिकित्सा देखभाल प्रदान की है। गायें हमारी संस्कृति में विशेष स्थान रखती हैं, जो मातृत्व और समृद्धि का प्रतीक हैं। हम करुणामय देखभाल और टिकाऊ खेती प्रथाओं में विश्वास करते हैं।
                 </Text>
-                <VideoWrapper
-                  $width={videoDimensions.width}
-                  $height={videoDimensions.height}
-                >
-                  <VideoElement 
-                    ref={videoRef}
-                    src={trailerVideo} 
-                    autoPlay 
-                    loop 
-                    playsInline 
-                    muted={isMuted}
-                    volume={volume}
-                    onClick={(e) => togglePlay(e)}
+                <YouTubeWrapper>
+                  <YouTubeIframe
+                    src="https://www.youtube.com/embed/3f2Evvxke9s"
+                    title="Anukampa Foundation Video"
+                    allowFullScreen
                   />
-                  <ControlsContainer>
-                    <PlayPauseButton onClick={togglePlay}>{isPlaying ? '⏸️' : '▶️'}</PlayPauseButton>
-                    <MuteButton onClick={toggleMute}>{isMuted ? '🔇' : '🔊'}</MuteButton>
-                    <ProgressBar onClick={handleSeek}>
-                      <Progress $progress={currentTime} $duration={duration} />
-                    </ProgressBar>
-                    <VolumeSlider value={volume} onChange={handleVolumeChange} />
-                  </ControlsContainer>
-                </VideoWrapper>
+                </YouTubeWrapper>
               </Section>
               <DonateSection id="donate">
                 <Title>दान करें</Title>
@@ -1115,9 +990,6 @@ function App() {
                   </PaymentOptionsContainer>
                 )}
                 
-                <Text style={{ fontSize: '14px', marginTop: '24px' }}>
-                  (नोट: यह एक प्लेसहोल्डर फॉर्म है; उत्पादन में स्ट्राइप जैसे पेमेंट गेटवे के साथ एकीकृत करें।)
-                </Text>
               </DonateSection>
               <Section id="gallery">
                 <Title>गैलरी</Title>
@@ -1178,20 +1050,20 @@ function App() {
           <Route path="/story/:id" element={
             <>
               <Header $isScrolled={isScrolled}>
-                <Logo>गौशाला आश्रय</Logo>
-                <Hamburger $isOpen={isNavOpen} onClick={toggleNav}>
+                <Logo $isScrolled={isScrolled}>Anukampa</Logo>
+                <Hamburger $isOpen={isNavOpen} $isScrolled={isScrolled} onClick={toggleNav}>
                   <span></span>
                   <span></span>
                   <span></span>
                 </Hamburger>
                 <Nav $isOpen={isNavOpen}>
-                  <NavLink to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
-                  <NavLink to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
-                  <NavLink to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
-                  <NavLink to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
-                  <NavLink to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
-                  <NavLink to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
-                  <NavLink to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                 </Nav>
               </Header>
               <StoryDetail />
