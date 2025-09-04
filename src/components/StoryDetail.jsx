@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { stories } from '../data/stories';
 
 const DetailContainer = styled.div`
@@ -34,12 +34,6 @@ const ContentWrapper = styled.div`
 
 `;
 
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  color: #f79e31;
-  margin-bottom: 24px;
-`;
 
 const Image = styled.img`
   width: 100%;
@@ -91,10 +85,6 @@ const BackButton = styled(Link)`
   }
 `;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
 
 const StoryDetail = () => {
   const { id } = useParams();

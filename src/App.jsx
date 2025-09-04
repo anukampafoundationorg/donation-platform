@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import cowImage from './assets/cowHero1.jpg';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import StoryDetail from './components/StoryDetail';
-import { stories } from './data/stories';
 
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
@@ -446,59 +445,6 @@ const FooterLink = styled.a`
   }
 `;
 
-const StoriesSection = styled.section`
-  padding: 64px 20px;
-  width: 100%;
-  margin: 0;
-  background-color: #f4f4f3;
-  text-align: center;
-  color: #2d3748;
-`;
-
-const StoriesTitle = styled.h2`
-  font-size: 36px;
-  font-weight: bold;
-  color: #f79e31;
-  margin-bottom: 24px;
-`;
-
-const StoriesSubtitle = styled.p`
-  font-size: 18px;
-  max-width: 800px;
-  margin: 0 auto 32px;
-`;
-
-const StoriesGrid = styled.div`
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
-const StoryCard = styled.div`
-  width: 320px;
-  margin: 16px;
-  padding: 24px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(74, 85, 104, 0.1);
-  text-align: left;
-  color: #2d3748;
-  transition: transform 0.3s ease, box-shadow 0.3s;
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
-  }
-`;
-
-const CardImage = styled.img.attrs({ loading: 'lazy' })`
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 16px;
-`;
 
 const CardTitle = styled.h3`
   font-size: 20px;
@@ -512,15 +458,6 @@ const CardText = styled.p`
   margin-bottom: 16px;
 `;
 
-const ReadMore = styled(Link)`
-  color: #f79e31;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s;
-  &:hover {
-    color: #c67e27;
-  }
-`;
 
 const BackToTop = styled.button`
   position: fixed;
@@ -603,28 +540,6 @@ const DonationSummary = styled.div`
   text-align: center;
 `;
 
-const PaymentMethodGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const PaymentMethodCard = styled.div`
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    border-color: #f79e31;
-    transform: translateY(-2px);
-  }
-`;
 
 const QRCodeContainer = styled.div`
   width: 200px;
@@ -724,6 +639,59 @@ const BankDetailValue = styled.span`
   font-size: 14px;
 `;
 
+// Team Styled Components
+const TeamContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+`;
+
+const TeamMember = styled.div`
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #f79e31;
+  }
+`;
+
+const TeamPosition = styled.h3`
+  color: #f79e31;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f79e31;
+`;
+
+const TeamName = styled.p`
+  color: #2d3748;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 8px 0;
+  line-height: 1.4;
+`;
+
+const TeamLocation = styled.p`
+  color: #718096;
+  font-size: 14px;
+  font-style: italic;
+  margin: 4px 0;
+`;
+
 // React Component
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -820,8 +788,9 @@ function App() {
                     <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
-                    <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#team" onClick={() => setIsNavOpen(false)}>हमारी टीम</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                   </Nav>
@@ -854,6 +823,7 @@ function App() {
                   />
                 </YouTubeWrapper>
               </Section>
+              
               <DonateSection id="donate">
                 <Title>दान करें</Title>
                 <Text>
@@ -942,7 +912,7 @@ function App() {
                         </p>
                         <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginBottom: '24px', lineHeight: '1.5' }}>
                           कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
-                          <strong>anukampafoundation.org@gmail.com</strong>
+                          <strong>anukampafoundationorg@gmail.com</strong>
                         </p>
                       </div>
                     )}
@@ -977,7 +947,7 @@ function App() {
                         </p>
                         <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginTop: '16px', lineHeight: '1.5', textAlign: 'center' }}>
                           कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
-                          <strong>anukampafoundation.org@gmail.com</strong>
+                          <strong>anukampafoundationorg@gmail.com</strong>
                         </p>
                       </div>
                     )}
@@ -1002,6 +972,42 @@ function App() {
                   ))}
                 </GalleryGrid>
               </Section>
+              
+              <Section id="team">
+                <Title>हमारी टीम</Title>
+                <TeamContainer>
+                  <TeamMember>
+                    <TeamPosition>डायरेक्टर</TeamPosition>
+                    <TeamName>ओम प्रकाश जैन</TeamName>
+                    <TeamName>उषा जैन</TeamName>
+                    <TeamName>निहाल जैन</TeamName>
+                  </TeamMember>
+                  
+                  <TeamMember>
+                    <TeamPosition>राष्ट्रीय अध्यक्ष</TeamPosition>
+                    <TeamName>कालू लाल जी सालेचा</TeamName>
+                    <TeamLocation>भवानी मंडी</TeamLocation>
+                  </TeamMember>
+                  
+                  <TeamMember>
+                    <TeamPosition>राष्ट्रीय महासचिव</TeamPosition>
+                    <TeamName>संजय जैन</TeamName>
+                    <TeamLocation>फुलेरा पिपलोन</TeamLocation>
+                  </TeamMember>
+                  
+                  <TeamMember>
+                    <TeamPosition>राष्ट्रीय उपाध्यक्ष</TeamPosition>
+                    <TeamName>श्रीमती शारदा जवाहर जी चौधरी</TeamName>
+                  </TeamMember>
+                  
+                  <TeamMember>
+                    <TeamPosition>राष्ट्रीय प्रमुख मार्गदर्शक</TeamPosition>
+                    <TeamName>श्री मोहनलाल जी मेहता</TeamName>
+                    <TeamLocation>रावटी</TeamLocation>
+                  </TeamMember>
+                </TeamContainer>
+              </Section>
+              
               <Section id="mission" bg="#f4f4f3">
                 <Title>हमारा मिशन</Title>
                 <Text>
