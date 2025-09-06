@@ -38,7 +38,7 @@ export const createOrder = async (orderData) => {
       order_id: orderData.order_id,
       payment_session_id: paymentSessionId,
       order_status: 'ACTIVE',
-      payment_url: `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${orderData.order_id}`
+      payment_url: `https://api.cashfree.com/pg/orders/${orderData.order_id}/payments`
     };
   }
 };
