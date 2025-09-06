@@ -13,10 +13,8 @@ const CASHFREE_CONFIG = {
 // Create order with Cashfree
 export const createOrder = async (orderData) => {
   try {
-    // In a real implementation, this would be a call to your backend API
-    // which would then call Cashfree's API with proper authentication
-    
-    const response = await fetch('/api/cashfree/create-order', {
+    // Try to call the Netlify function first
+    const response = await fetch('/.netlify/functions/create-order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,21 +22,22 @@ export const createOrder = async (orderData) => {
       body: JSON.stringify(orderData)
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to create order');
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.warn('Netlify function not available, using mock response');
+      throw new Error('Backend not available');
     }
-
-    return await response.json();
   } catch (error) {
-    console.error('Error creating order:', error);
+    console.log('Using mock response for demo purposes:', error.message);
     
-    // For demo purposes, return a mock response
+    // Return mock response for demo purposes when backend is not available
     return {
       success: true,
       order_id: orderData.order_id,
       payment_session_id: `session_${Date.now()}`,
       order_status: 'ACTIVE',
-      payment_url: `${CASHFREE_CONFIG.baseUrl}/payments/${orderData.order_id}`
+      payment_url: `https://merchant.cashfree.com/merchant/pg?payment_session_id=session_${Date.now()}`
     };
   }
 };
@@ -46,20 +45,21 @@ export const createOrder = async (orderData) => {
 // Verify payment status
 export const verifyPayment = async (orderId) => {
   try {
-    const response = await fetch(`/api/cashfree/verify-payment/${orderId}`, {
+    const response = await fetch(`/.netlify/functions/verify-payment?orderId=${orderId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       }
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to verify payment');
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.warn('Netlify function not available, using mock response');
+      throw new Error('Backend not available');
     }
-
-    return await response.json();
   } catch (error) {
-    console.error('Error verifying payment:', error);
+    console.log('Using mock response for demo purposes:', error.message);
     
     // For demo purposes, return a mock response
     return {
