@@ -250,7 +250,7 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
 
   // Initialize Cashfree SDK
   const initializeSDK = async () => {
-    const cashfree = await load({ mode: "sandbox" });
+    const cashfree = await load({ mode: "production" });
     return cashfree;
   };
 

@@ -4,10 +4,8 @@
 const CASHFREE_CONFIG = {
   appId: process.env.REACT_APP_CASHFREE_APP_ID,
   secretKey: process.env.REACT_APP_CASHFREE_SECRET_KEY,
-  environment: process.env.REACT_APP_CASHFREE_ENVIRONMENT || 'production',
-  baseUrl: process.env.REACT_APP_CASHFREE_ENVIRONMENT === 'sandbox' 
-    ? 'https://sandbox.cashfree.com/pg' 
-    : 'https://api.cashfree.com/pg'
+  environment: 'production',
+  baseUrl: 'https://api.cashfree.com/pg'
 };
 
 // Create order with Cashfree

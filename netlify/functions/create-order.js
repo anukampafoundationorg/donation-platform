@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
     // Cashfree API configuration
     const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID;
     const CASHFREE_SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
-    const CASHFREE_ENVIRONMENT = process.env.CASHFREE_ENVIRONMENT || 'production';
+    const CASHFREE_ENVIRONMENT = 'production';
     
     if (!CASHFREE_APP_ID || !CASHFREE_SECRET_KEY) {
       return {
@@ -37,15 +37,13 @@ exports.handler = async (event, context) => {
       order_tags: orderData.order_tags
     };
 
-    const apiUrl = CASHFREE_ENVIRONMENT === 'sandbox' 
-      ? 'https://sandbox.cashfree.com/pg/orders'
-      : 'https://api.cashfree.com/pg/orders';
+    const apiUrl = 'https://api.cashfree.com/pg/orders';
 
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-version': '2023-08-01',
+        'x-api-version': '2025-01-01',
         'x-client-id': CASHFREE_APP_ID,
         'x-client-secret': CASHFREE_SECRET_KEY
       }
@@ -73,7 +71,7 @@ exports.handler = async (event, context) => {
 
     // Construct the payment URL - Use the payments.url from Cashfree response
     const paymentUrl = responseData.payments?.url || 
-      `https://${CASHFREE_ENVIRONMENT === 'sandbox' ? 'sandbox' : 'api'}.cashfree.com/pg/orders/${orderData.order_id}/payments`;
+      `https://api.cashfree.com/pg/orders/${orderData.order_id}/payments`;
     
     console.log('Cashfree API Response:', responseData);
     console.log('Constructed Payment URL:', paymentUrl);
