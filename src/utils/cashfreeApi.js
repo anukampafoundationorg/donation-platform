@@ -90,8 +90,8 @@ export const generateOrderData = (donationData) => {
     },
     order_meta: {
       return_url: `${window.location.origin}/payment-success?order_id=${orderId}`,
-      notify_url: `${window.location.origin}/api/cashfree/webhook`,
-      payment_methods: 'cc,dc,nb,upi,wallet,paylater',
+      notify_url: `${window.location.origin}/.netlify/functions/webhook`,
+      payment_methods: 'cc,dc,nb,upi,app,paylater',
       order_note: `Donation for Anukampa Foundation - ${donationData.name}`
     },
     order_tags: {

@@ -364,10 +364,10 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
           🏦 Net Banking
         </PaymentMethodTab>
         <PaymentMethodTab
-          $active={selectedPaymentMethod === 'wallet'}
-          onClick={() => setSelectedPaymentMethod('wallet')}
+          $active={selectedPaymentMethod === 'app'}
+          onClick={() => setSelectedPaymentMethod('app')}
         >
-          💰 Wallet
+          📱 App
         </PaymentMethodTab>
       </PaymentMethodTabs>
 
@@ -480,17 +480,17 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
           </>
         )}
 
-        {selectedPaymentMethod === 'wallet' && (
+        {selectedPaymentMethod === 'app' && (
           <>
-            <PaymentMethodTitle>Wallet Payment</PaymentMethodTitle>
+            <PaymentMethodTitle>App Payment</PaymentMethodTitle>
             <UpiInstructions>
               <UpiStep>
                 <UpiStepNumber>1</UpiStepNumber>
-                Click "Pay with Wallet" to open Cashfree's secure payment page
+                Click "Pay with App" to open Cashfree's secure payment page
               </UpiStep>
               <UpiStep>
                 <UpiStepNumber>2</UpiStepNumber>
-                Select your preferred wallet (Paytm, PhonePe, etc.) and complete payment
+                Select your preferred payment app (Paytm, PhonePe, Google Pay, etc.) and complete payment
               </UpiStep>
               <UpiStep>
                 <UpiStepNumber>3</UpiStepNumber>
@@ -507,7 +507,7 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
                   Processing...
                 </>
               ) : (
-                'Pay with Wallet'
+                'Pay with App'
               )}
             </PayButton>
           </>
