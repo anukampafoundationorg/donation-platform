@@ -8,6 +8,7 @@ import {
   CardCvv,
   SaveInstrument,
 } from '@cashfreepayments/pg-react';
+import { load } from '@cashfreepayments/cashfree-js';
 import { createOrder, generateOrderData } from '../utils/cashfreeApi';
 
 // Styled components for the payment form
@@ -247,6 +248,31 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
 
   // Cashfree configuration is handled in the API utilities
 
+  // Initialize Cashfree SDK
+  const initializeSDK = async () => {
+    const cashfree = await load({ mode: "sandbox" });
+    return cashfree;
+  };
+
+  // Initiate Cashfree payment process
+  const initiatePayment = async (sessionId) => {
+    try {
+      const cashfree = await initializeSDK();
+      
+      const checkoutOptions = {
+        paymentSessionId: sessionId,
+        redirectTarget: "_self",  // Redirects to the target URL after payment
+      };
+      
+      console.log("Starting checkout with options:", checkoutOptions);
+      cashfree.checkout(checkoutOptions);
+    } catch (error) {
+      console.error("Error initializing payment:", error);
+      setError("Failed to initialize payment. Please try again.");
+      setIsProcessing(false);
+    }
+  };
+
   const handlePayment = async () => {
     // For card payments, check if form is complete
     if (selectedPaymentMethod === 'card' && !isComplete) return;
@@ -262,23 +288,15 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
       const orderResponse = await createOrder(orderData);
       
       if (orderResponse.success) {
-        // For non-card payments, redirect to Cashfree payment page
+        // For non-card payments, use Cashfree JavaScript SDK
         if (selectedPaymentMethod !== 'card') {
-          console.log('Redirecting to Cashfree payment page:', orderResponse.payment_url);
+          console.log('Starting Cashfree payment with session:', orderResponse.payment_session_id);
           
-          // Show redirecting message
-          setSuccess('Redirecting to payment page... Please complete your payment.');
-          setIsProcessing(false);
+          // Show processing message
+          setSuccess('Initializing payment... Please wait.');
           
-          // Redirect to Cashfree payment page
-          if (orderResponse.payment_url) {
-            // Use the actual payment URL from Cashfree
-            window.location.href = orderResponse.payment_url;
-          } else {
-            // Fallback: construct payment URL using payment_session_id
-            const paymentUrl = `https://api.cashfree.com/pg/orders/${orderResponse.order_id}/payments`;
-            window.location.href = paymentUrl;
-          }
+          // Use Cashfree JavaScript SDK for payment
+          await initiatePayment(orderResponse.payment_session_id);
         } else {
           // For card payments, process directly
           setSuccess('Payment processed successfully! Thank you for your donation.');

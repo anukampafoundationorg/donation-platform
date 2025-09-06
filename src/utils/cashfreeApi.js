@@ -90,7 +90,7 @@ export const generateOrderData = (donationData) => {
       customer_phone: '9999999999'
     },
     order_meta: {
-      return_url: `${window.location.origin}/payment-success?order_id=${orderId}`,
+      return_url: `${window.location.origin}/payment-success?order_id={order_id}`,
       notify_url: `${window.location.origin}/.netlify/functions/webhook`,
       payment_methods: 'cc,dc,nb,upi,app,paylater',
       order_note: `Donation for Anukampa Foundation - ${donationData.name}`
