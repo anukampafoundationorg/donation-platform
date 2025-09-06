@@ -71,6 +71,10 @@ exports.handler = async (event, context) => {
       };
     }
 
+    // Construct the payment URL
+    const paymentUrl = responseData.payment_url || 
+      `https://merchant.cashfree.com/merchant/pg?payment_session_id=${responseData.payment_session_id}`;
+
     return {
       statusCode: 200,
       headers: {
@@ -84,7 +88,7 @@ exports.handler = async (event, context) => {
         order_id: responseData.order_id,
         payment_session_id: responseData.payment_session_id,
         order_status: responseData.order_status,
-        payment_url: responseData.payment_url
+        payment_url: paymentUrl
       })
     };
 

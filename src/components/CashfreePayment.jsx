@@ -264,26 +264,21 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
       if (orderResponse.success) {
         // For non-card payments, redirect to Cashfree payment page
         if (selectedPaymentMethod !== 'card') {
-          // In a real implementation, you would redirect to Cashfree's payment page
-          // For now, we'll simulate the redirect
           console.log('Redirecting to Cashfree payment page:', orderResponse.payment_url);
           
-          // Simulate redirect delay
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
+          // Show redirecting message
           setSuccess('Redirecting to payment page... Please complete your payment.');
           setIsProcessing(false);
           
-          // In production, you would do:
-          // window.location.href = orderResponse.payment_url;
-          
-          // For demo, simulate successful payment after delay
-          setTimeout(() => {
-            setSuccess('Payment processed successfully! Thank you for your donation.');
-            setTimeout(() => {
-              onPaymentSuccess && onPaymentSuccess();
-            }, 2000);
-          }, 3000);
+          // Redirect to Cashfree payment page
+          if (orderResponse.payment_url) {
+            // Use the actual payment URL from Cashfree
+            window.location.href = orderResponse.payment_url;
+          } else {
+            // Fallback: construct payment URL using payment_session_id
+            const paymentUrl = `https://merchant.cashfree.com/merchant/pg?payment_session_id=${orderResponse.payment_session_id}`;
+            window.location.href = paymentUrl;
+          }
         } else {
           // For card payments, process directly
           setSuccess('Payment processed successfully! Thank you for your donation.');

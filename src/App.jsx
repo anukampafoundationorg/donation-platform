@@ -7,6 +7,7 @@ import StoryDetail from './components/StoryDetail';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import CashfreePayment from './components/CashfreePayment';
+import PaymentSuccess from './components/PaymentSuccess';
 
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
@@ -1094,6 +1095,7 @@ function App() {
               <StoryDetail />
             </>
           } />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
         </Routes>

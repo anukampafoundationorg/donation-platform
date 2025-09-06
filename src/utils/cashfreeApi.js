@@ -32,12 +32,13 @@ export const createOrder = async (orderData) => {
     console.log('Using mock response for demo purposes:', error.message);
     
     // Return mock response for demo purposes when backend is not available
+    const paymentSessionId = `session_${Date.now()}`;
     return {
       success: true,
       order_id: orderData.order_id,
-      payment_session_id: `session_${Date.now()}`,
+      payment_session_id: paymentSessionId,
       order_status: 'ACTIVE',
-      payment_url: `https://merchant.cashfree.com/merchant/pg?payment_session_id=session_${Date.now()}`
+      payment_url: `https://merchant.cashfree.com/merchant/pg?payment_session_id=${paymentSessionId}`
     };
   }
 };
