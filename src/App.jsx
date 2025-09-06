@@ -6,6 +6,7 @@ import { HashLink } from 'react-router-hash-link';
 import StoryDetail from './components/StoryDetail';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
+import CashfreePayment from './components/CashfreePayment';
 
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
@@ -16,7 +17,6 @@ import cow6 from './assets/cowimg6.jpeg';
 import cow7 from './assets/cowimg7.jpeg';
 import cow8 from './assets/cowimg8.jpeg';
 import cow9 from './assets/cowimg9.jpeg';
-import upiQR from './assets/upi.jpeg';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -570,23 +570,6 @@ const DonationSummary = styled.div`
 `;
 
 
-const QRCodeContainer = styled.div`
-  width: 200px;
-  height: 200px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 16px auto;
-  overflow: hidden;
-`;
-
-const QRCodeImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
 
 const BackButton = styled.button`
   background: #e2e8f0;
@@ -769,6 +752,12 @@ function App() {
     setSelectedPaymentMethod(method);
   };
 
+  const handlePaymentSuccess = () => {
+    setDonationData(null);
+    setSelectedAmount('');
+    setSelectedPaymentMethod(null);
+  };
+
   const galleryImages = [
     { src: cow1, alt: 'खेत में गायें', caption: 'शांतिपूर्ण खेत' },
     { src: cow2, alt: 'गायों की देखभाल', caption: 'प्यार भरी देखभाल' },
@@ -926,10 +915,10 @@ function App() {
                     
                     <PaymentMethodSelector>
                       <PaymentMethodButton
-                        $active={selectedPaymentMethod === 'upi'}
-                        onClick={() => handlePaymentMethodSelect('upi')}
+                        $active={selectedPaymentMethod === 'cashfree'}
+                        onClick={() => handlePaymentMethodSelect('cashfree')}
                       >
-                        UPI Payment
+                        Online Payment (Cards, UPI, Net Banking, Wallets)
                       </PaymentMethodButton>
                       <PaymentMethodButton
                         $active={selectedPaymentMethod === 'neft'}
@@ -939,20 +928,12 @@ function App() {
                       </PaymentMethodButton>
                     </PaymentMethodSelector>
                     
-                    {selectedPaymentMethod === 'upi' && (
-                      <div style={{ textAlign: 'center' }}>
-                        <h4 style={{ color: '#f79e31', marginBottom: '16px' }}>UPI भुगतान</h4>
-                        <QRCodeContainer>
-                          <QRCodeImage src={upiQR} alt="UPI QR Code" />
-                        </QRCodeContainer>
-                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
-                          QR कोड स्कैन करें और भुगतान करें
-                        </p>
-                        <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginBottom: '24px', lineHeight: '1.5' }}>
-                          कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
-                          <strong>anukampafoundationorg@gmail.com</strong>
-                        </p>
-                      </div>
+                    {selectedPaymentMethod === 'cashfree' && (
+                      <CashfreePayment
+                        donationData={donationData}
+                        onPaymentSuccess={handlePaymentSuccess}
+                        onBack={() => setSelectedPaymentMethod(null)}
+                      />
                     )}
                     
                     {selectedPaymentMethod === 'neft' && (
