@@ -73,7 +73,7 @@ exports.handler = async (event, context) => {
 
     // Construct the payment URL - Cashfree returns payment_url in the response
     const paymentUrl = responseData.payment_url || 
-      `https://checkout.cashfree.com/pg/checkout?payment_session_id=${responseData.payment_session_id}`;
+      `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${orderData.order_id}`;
     
     console.log('Cashfree API Response:', responseData);
     console.log('Constructed Payment URL:', paymentUrl);

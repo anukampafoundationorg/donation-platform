@@ -276,7 +276,7 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
             window.location.href = orderResponse.payment_url;
           } else {
             // Fallback: construct payment URL using payment_session_id
-            const paymentUrl = `https://checkout.cashfree.com/pg/checkout?payment_session_id=${orderResponse.payment_session_id}`;
+            const paymentUrl = `https://www.cashfree.com/devstudio/preview/pg/web/checkout?order_id=${orderResponse.order_id}`;
             window.location.href = paymentUrl;
           }
         } else {
