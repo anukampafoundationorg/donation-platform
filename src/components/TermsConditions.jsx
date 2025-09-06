@@ -165,13 +165,16 @@ function TermsConditions() {
         </Section>
 
         <Section>
-          <SectionTitle>3. दान की शर्तें</SectionTitle>
+          <SectionTitle>3. दान की शर्तें और भुगतान प्रसंस्करण</SectionTitle>
           <Paragraph>दान करते समय निम्नलिखित शर्तें लागू होती हैं:</Paragraph>
           <NumberedList>
             <NumberedListItem>सभी दान स्वैच्छिक हैं और वापसी योग्य नहीं हैं</NumberedListItem>
             <NumberedListItem>दान की राशि का उपयोग केवल संगठन के उद्देश्यों के लिए किया जाएगा</NumberedListItem>
             <NumberedListItem>दान के लिए कर छूट के लिए आवश्यक दस्तावेज प्रदान किए जाएंगे</NumberedListItem>
-            <NumberedListItem>दान की राशि में कोई छुपी हुई फीस नहीं है</NumberedListItem>
+            <NumberedListItem>PhonePe B2B सेवा शुल्क लेनदेन मूल्य के 1.95% पर लागू होता है</NumberedListItem>
+            <NumberedListItem>क्रेडिट कार्ड (Amex, Diners, Corporate) के लिए 2.90% शुल्क लागू होता है</NumberedListItem>
+            <NumberedListItem>सभी शुल्क जीएसटी और अन्य करों से अलग हैं</NumberedListItem>
+            <NumberedListItem>भुगतान T+1 दिन के भीतर किया जाता है जहां T लेनदेन की तारीख है</NumberedListItem>
             <NumberedListItem>दानकर्ता की जानकारी गोपनीय रखी जाएगी</NumberedListItem>
           </NumberedList>
         </Section>
@@ -231,7 +234,38 @@ function TermsConditions() {
         </Section>
 
         <Section>
-          <SectionTitle>11. संपूर्ण समझौता</SectionTitle>
+          <SectionTitle>11. PhonePe B2B सेवाएं और भुगतान शर्तें</SectionTitle>
+          <Paragraph>
+            हमारी वेबसाइट PhonePe B2B सेवाओं का उपयोग करती है भुगतान प्रसंस्करण के लिए। निम्नलिखित शर्तें लागू होती हैं:
+          </Paragraph>
+          <NumberedList>
+            <NumberedListItem>PhonePe B2B सेवा शुल्क लेनदेन मूल्य के 1.95% पर लागू होता है (सभी भुगतान साधनों के लिए)</NumberedListItem>
+            <NumberedListItem>क्रेडिट कार्ड (Amex, Diners, Corporate) के लिए 2.90% शुल्क लागू होता है</NumberedListItem>
+            <NumberedListItem>सभी शुल्क जीएसटी और अन्य करों से अलग हैं</NumberedListItem>
+            <NumberedListItem>भुगतान T+1 दिन के भीतर किया जाता है जहां T लेनदेन की तारीख है</NumberedListItem>
+            <NumberedListItem>मासिक समेकित जीएसटी चालान प्रदान किया जाएगा</NumberedListItem>
+            <NumberedListItem>अतिदेय राशि पर 12% प्रति वर्ष की दर से देर से भुगतान शुल्क लागू होता है</NumberedListItem>
+            <NumberedListItem>PhonePe B2B सेवा शुल्क रद्दीकरण, चार्जबैक या लेनदेन की वापसी के मामले में वापस नहीं किया जाएगा</NumberedListItem>
+            <NumberedListItem>RBI/NPCI/किसी अन्य नियामक निकाय द्वारा शुल्क में वृद्धि या कमी को PhonePe द्वारा समायोजित किया जा सकता है</NumberedListItem>
+          </NumberedList>
+        </Section>
+
+        <Section>
+          <SectionTitle>12. PhonePe के साथ डेटा साझाकरण</SectionTitle>
+          <Paragraph>
+            PhonePe B2B सेवाओं के लिए, हम निम्नलिखित जानकारी PhonePe के साथ साझा कर सकते हैं:
+          </Paragraph>
+          <List>
+            <ListItem>कुल लेनदेन मूल्य (PhonePe द्वारा सक्षम सभी भुगतान साधनों के साथ)</ListItem>
+            <ListItem>लेनदेन स्रोत विवरण (क्लाइंट प्लेटफॉर्म के माध्यम से प्रत्येक लेनदेन स्तर पर)</ListItem>
+            <ListItem>लेनदेन की भुगतान स्थिति</ListItem>
+            <ListItem>लेनदेन आईडी (क्लाइंट प्लेटफॉर्म के माध्यम से प्रत्येक लेनदेन के आधार पर)</ListItem>
+            <ListItem>अद्वितीय लेनदेन संदर्भ आईडी (UTR) / बैंक आईडी</ListItem>
+          </List>
+        </Section>
+
+        <Section>
+          <SectionTitle>13. संपूर्ण समझौता</SectionTitle>
           <Paragraph>
             ये शर्तें आपके और अनुकम्पा फाउंडेशन के बीच संपूर्ण समझौता बनाती हैं और पिछले सभी समझौतों को प्रतिस्थापित करती हैं।
           </Paragraph>
@@ -244,8 +278,8 @@ function TermsConditions() {
           </Paragraph>
           <Paragraph>
             <strong>ईमेल:</strong> anukampafoundationorg@gmail.com<br />
-            <strong>फोन:</strong> [फोन नंबर]<br />
-            <strong>पता:</strong> [पूरा पता]
+            <strong>फोन:</strong> 6261537751<br />
+            <strong>पता:</strong> 401 बगड़िया टावर, 5वीं मंजिल, सेंट्रल कोठवाली के पास, उज्जैन 456001
           </Paragraph>
         </ContactInfo>
       </Content>

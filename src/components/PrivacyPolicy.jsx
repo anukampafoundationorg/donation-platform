@@ -145,8 +145,11 @@ function PrivacyPolicy() {
           <List>
             <ListItem>नाम और संपर्क विवरण (ईमेल, फोन नंबर, पता)</ListItem>
             <ListItem>दान संबंधी जानकारी (दान राशि, दान का उद्देश्य)</ListItem>
+            <ListItem>भुगतान संबंधी जानकारी (UPI, क्रेडिट/डेबिट कार्ड विवरण, बैंक खाता विवरण)</ListItem>
+            <ListItem>PhonePe B2B सेवाओं के माध्यम से लेनदेन डेटा</ListItem>
             <ListItem>वेबसाइट उपयोग डेटा (आईपी पता, ब्राउज़र प्रकार, पेज विज़िट)</ListItem>
             <ListItem>कुकीज़ और समान तकनीकों के माध्यम से डेटा</ListItem>
+            <ListItem>लेनदेन आईडी, यूटीआर, और भुगतान स्थिति जानकारी</ListItem>
           </List>
         </Section>
 
@@ -155,10 +158,13 @@ function PrivacyPolicy() {
           <Paragraph>हम आपकी जानकारी का उपयोग निम्नलिखित उद्देश्यों के लिए करते हैं:</Paragraph>
           <List>
             <ListItem>दान प्रक्रिया को संसाधित करने के लिए</ListItem>
+            <ListItem>PhonePe B2B सेवाओं के माध्यम से भुगतान प्रसंस्करण</ListItem>
+            <ListItem>लेनदेन स्थिति और भुगतान पुष्टि प्रदान करने के लिए</ListItem>
+            <ListItem>कानूनी और नियामक आवश्यकताओं को पूरा करने के लिए</ListItem>
             <ListItem>आपको हमारे कार्यक्रमों के बारे में अपडेट भेजने के लिए</ListItem>
-            <ListItem>कानूनी आवश्यकताओं को पूरा करने के लिए</ListItem>
             <ListItem>वेबसाइट की कार्यक्षमता में सुधार के लिए</ListItem>
             <ListItem>धन उगाही और जागरूकता अभियानों के लिए</ListItem>
+            <ListItem>भुगतान सुरक्षा और धोखाधड़ी रोकथाम के लिए</ListItem>
           </List>
         </Section>
 
@@ -170,7 +176,10 @@ function PrivacyPolicy() {
           <List>
             <ListItem>आपने स्पष्ट सहमति दी हो</ListItem>
             <ListItem>कानूनी आवश्यकता हो</ListItem>
+            <ListItem>PhonePe B2B सेवाओं के लिए भुगतान प्रसंस्करण के लिए आवश्यक हो</ListItem>
             <ListItem>हमारी सेवाएं प्रदान करने के लिए आवश्यक हो</ListItem>
+            <ListItem>नियामक आवश्यकताओं के अनुपालन के लिए</ListItem>
+            <ListItem>भुगतान सुरक्षा और धोखाधड़ी रोकथाम के लिए</ListItem>
           </List>
         </Section>
 
@@ -200,7 +209,22 @@ function PrivacyPolicy() {
         </Section>
 
         <Section>
-          <SectionTitle>8. नीति में परिवर्तन</SectionTitle>
+          <SectionTitle>8. PhonePe B2B सेवाएं और भुगतान प्रसंस्करण</SectionTitle>
+          <Paragraph>
+            हमारी वेबसाइट PhonePe B2B सेवाओं का उपयोग करती है भुगतान प्रसंस्करण के लिए। PhonePe के साथ हमारा संबंध निम्नलिखित शर्तों के अधीन है:
+          </Paragraph>
+          <List>
+            <ListItem>भुगतान जानकारी PhonePe के सुरक्षित सर्वरों पर संसाधित की जाती है</ListItem>
+            <ListItem>PhonePe B2B सेवा शुल्क लेनदेन मूल्य के 1.95% पर लागू होता है</ListItem>
+            <ListItem>क्रेडिट कार्ड (Amex, Diners, Corporate) के लिए 2.90% शुल्क लागू होता है</ListItem>
+            <ListItem>सभी शुल्क जीएसटी और अन्य करों से अलग हैं</ListItem>
+            <ListItem>भुगतान T+1 दिन के भीतर किया जाता है जहां T लेनदेन की तारीख है</ListItem>
+            <ListItem>PhonePe के साथ साझा की गई जानकारी उनकी गोपनीयता नीति के अधीन है</ListItem>
+          </List>
+        </Section>
+
+        <Section>
+          <SectionTitle>9. नीति में परिवर्तन</SectionTitle>
           <Paragraph>
             हम इस गोपनीयता नीति को समय-समय पर अपडेट कर सकते हैं। किसी भी महत्वपूर्ण परिवर्तन के बारे में हम आपको सूचित करेंगे।
           </Paragraph>
@@ -213,8 +237,8 @@ function PrivacyPolicy() {
           </Paragraph>
           <Paragraph>
             <strong>ईमेल:</strong> anukampafoundationorg@gmail.com<br />
-            <strong>फोन:</strong> [फोन नंबर]<br />
-            <strong>पता:</strong> [पूरा पता]
+            <strong>फोन:</strong> 6261537751<br />
+            <strong>पता:</strong> 401 बगड़िया टावर, 5वीं मंजिल, सेंट्रल कोठवाली के पास, उज्जैन 456001
           </Paragraph>
         </ContactInfo>
       </Content>
