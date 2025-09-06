@@ -89,6 +89,15 @@ const SectionTitle = styled.h2`
   padding-bottom: 8px;
 `;
 
+const SubSectionTitle = styled.h3`
+  font-size: 20px;
+  font-weight: 600;
+  color: #f79e31;
+  margin: 24px 0 12px 0;
+  border-left: 4px solid #f79e31;
+  padding-left: 12px;
+`;
+
 const Paragraph = styled.p`
   font-size: 16px;
   margin-bottom: 16px;
@@ -234,38 +243,97 @@ function TermsConditions() {
         </Section>
 
         <Section>
-          <SectionTitle>11. PhonePe B2B सेवाएं और भुगतान शर्तें</SectionTitle>
+          <SectionTitle>11. PhonePe B2B सेवाएं - अतिरिक्त ग्राहक शर्तें</SectionTitle>
           <Paragraph>
-            हमारी वेबसाइट PhonePe B2B सेवाओं का उपयोग करती है भुगतान प्रसंस्करण के लिए। निम्नलिखित शर्तें लागू होती हैं:
+            ये अतिरिक्त ग्राहक शर्तें PhonePe B2B सेवाओं के लिए लागू होती हैं। 'क्लाइंट/आप/आपका' का अर्थ है कोई भी प्राकृतिक या कानूनी व्यक्ति जो PhonePe के साथ क्लाइंट के रूप में पंजीकृत है। 'हम', 'हमारा', 'PhonePe', 'कंपनी' का अर्थ है PhonePe Limited।
           </Paragraph>
-          <NumberedList>
-            <NumberedListItem>PhonePe B2B सेवा शुल्क लेनदेन मूल्य के 1.95% पर लागू होता है (सभी भुगतान साधनों के लिए)</NumberedListItem>
-            <NumberedListItem>क्रेडिट कार्ड (Amex, Diners, Corporate) के लिए 2.90% शुल्क लागू होता है</NumberedListItem>
-            <NumberedListItem>सभी शुल्क जीएसटी और अन्य करों से अलग हैं</NumberedListItem>
-            <NumberedListItem>भुगतान T+1 दिन के भीतर किया जाता है जहां T लेनदेन की तारीख है</NumberedListItem>
-            <NumberedListItem>मासिक समेकित जीएसटी चालान प्रदान किया जाएगा</NumberedListItem>
-            <NumberedListItem>अतिदेय राशि पर 12% प्रति वर्ष की दर से देर से भुगतान शुल्क लागू होता है</NumberedListItem>
-            <NumberedListItem>PhonePe B2B सेवा शुल्क रद्दीकरण, चार्जबैक या लेनदेन की वापसी के मामले में वापस नहीं किया जाएगा</NumberedListItem>
-            <NumberedListItem>RBI/NPCI/किसी अन्य नियामक निकाय द्वारा शुल्क में वृद्धि या कमी को PhonePe द्वारा समायोजित किया जा सकता है</NumberedListItem>
-          </NumberedList>
+          
+          <SubSectionTitle>11.1 वाणिज्यिक शुल्क</SubSectionTitle>
+          <Paragraph>क्लाइंट PhonePe को निम्नलिखित शुल्क का भुगतान करेगा:</Paragraph>
+          <List>
+            <ListItem>PhonePe B2B सेवा शुल्क* - सभी भुगतान साधनों के लिए सकल लेनदेन मूल्य का 1.95% (प्रत्येक लेनदेन के आधार पर)</ListItem>
+            <ListItem>क्रेडिट कार्ड (Amex) - 2.90%</ListItem>
+            <ListItem>क्रेडिट कार्ड (Diners) - 2.90%</ListItem>
+            <ListItem>क्रेडिट कार्ड (Corporate) - 2.90%</ListItem>
+          </List>
+          
+          <SubSectionTitle>11.2 शुल्क नोट</SubSectionTitle>
+          <List>
+            <ListItem>सभी दरें वस्तु एवं सेवा कर और अन्य करों से अलग हैं</ListItem>
+            <ListItem>लागू TDS काटा जाएगा</ListItem>
+            <ListItem>क्लाइंट सभी प्रासंगिक करों के भुगतान के लिए जिम्मेदार होगा</ListItem>
+            <ListItem>रद्दीकरण, चार्जबैक या लेनदेन की वापसी के मामले में PhonePe B2B सेवा शुल्क वापस नहीं किया जाएगा</ListItem>
+            <ListItem>चालान में बताई गई अतिदेय राशि को साफ करने में देरी पर 12% प्रति वर्ष की दर से देर से भुगतान शुल्क लगेगा</ListItem>
+          </List>
         </Section>
 
         <Section>
-          <SectionTitle>12. PhonePe के साथ डेटा साझाकरण</SectionTitle>
+          <SectionTitle>12. क्लाइंट को भुगतान</SectionTitle>
+          <List>
+            <ListItem>सभी भुगतान T+1 दिन के भीतर किए जाएंगे जहां T लेनदेन की तारीख है</ListItem>
+            <ListItem>समझौते के दौरान, दोनों रिडेम्प्शन और रिडेम्प्शन रद्दीकरण लेनदेन को सात (7) कार्य दिवसों के भीतर नेट ऑफ किया जाएगा</ListItem>
+            <ListItem>यदि किसी दिन के लिए सेटलमेंट राशि नकारात्मक है, तो PhonePe क्लाइंट से बकाया राशि वसूलने का हकदार होगा</ListItem>
+            <ListItem>हर महीने के लिए समेकित वस्तु एवं सेवा कर (GST) चालान दिया जाएगा</ListItem>
+            <ListItem>PhonePe मासिक आधार पर क्लाइंट पर समेकित चालान जारी करेगा</ListItem>
+            <ListItem>बकाया राशि और अन्य धन PhonePe B2B सेवा शुल्क पर लागू TDS क्लाइंट द्वारा आयकर विभाग को दिया जाएगा</ListItem>
+            <ListItem>PhonePe TDS प्रमाणपत्र प्रस्तुत करने पर त्रैमासिक आधार पर TDS राशि का प्रतिपूर्ति करेगा</ListItem>
+          </List>
+        </Section>
+
+        <Section>
+          <SectionTitle>13. ऑफर अवधि</SectionTitle>
           <Paragraph>
-            PhonePe B2B सेवाओं के लिए, हम निम्नलिखित जानकारी PhonePe के साथ साझा कर सकते हैं:
+            PhonePe द्वारा Salt Key जेनरेट करने से शुरू होकर दूसरे महीने के अंत तक PhonePe B2B सेवा शुल्क नहीं लगाया जाएगा। यह ऑफर अवधि केवल ₹2,00,000/- (दो लाख रुपये) तक के कुल लेनदेन के लिए लागू है।
+          </Paragraph>
+        </Section>
+
+        <Section>
+          <SectionTitle>14. रेफरल पार्टनर के साथ डेटा साझाकरण</SectionTitle>
+          <Paragraph>
+            यदि क्लाइंट को किसी पार्टनर द्वारा रेफर किया गया है, तो निम्नलिखित शर्तें लागू होंगी:
           </Paragraph>
           <List>
+            <ListItem>क्लाइंट PhonePe के साथ सहमत होता है कि वह PhonePe B2B सेवाओं के लिए रेफरल पार्टनर के माध्यम से रेफर किया गया है</ListItem>
+            <ListItem>रेफरल पार्टनर को क्लाइंट की जानकारी की आवश्यकता होती है जो PhonePe द्वारा सुविधाजनक लेनदेन के लिए सीमित है</ListItem>
+            <ListItem>क्लाइंट PhonePe को सहमति देता है और PhonePe को कुल लेनदेन मूल्य साझा करने के लिए अधिकृत करता है</ListItem>
+            <ListItem>क्लाइंट सुनिश्चित करेगा कि रेफरल पार्टनर गोपनीयता दायित्वों से बाध्य है</ListItem>
+            <ListItem>क्लाइंट PhonePe को रेफरल पार्टनर के दायित्वों के उल्लंघन से होने वाले नुकसान से बचाता है</ListItem>
+          </List>
+        </Section>
+
+        <Section>
+          <SectionTitle>15. TSP रेफरल पार्टनर के साथ तकनीकी एकीकरण</SectionTitle>
+          <Paragraph>
+            यदि क्लाइंट को TSP रेफरल पार्टनर द्वारा रेफर किया गया है जो तकनीकी एकीकरण प्रदान करता है:
+          </Paragraph>
+          <List>
+            <ListItem>क्लाइंट और TSP रेफरल पार्टनर ने PhonePe B2B सेवाओं के लिए तकनीकी एकीकरण सक्षम करने के लिए एक समझौता किया है</ListItem>
+            <ListItem>क्लाइंट ने TSP रेफरल पार्टनर को PhonePe के साथ आवश्यक एकीकरण करने के लिए अधिकृत किया है</ListItem>
+            <ListItem>क्लाइंट PhonePe को TSP रेफरल पार्टनर के साथ निम्नलिखित जानकारी साझा करने के लिए सहमति देता है:</ListItem>
+          </List>
+          <List style={{ marginLeft: '20px' }}>
             <ListItem>कुल लेनदेन मूल्य (PhonePe द्वारा सक्षम सभी भुगतान साधनों के साथ)</ListItem>
             <ListItem>लेनदेन स्रोत विवरण (क्लाइंट प्लेटफॉर्म के माध्यम से प्रत्येक लेनदेन स्तर पर)</ListItem>
             <ListItem>लेनदेन की भुगतान स्थिति</ListItem>
             <ListItem>लेनदेन आईडी (क्लाइंट प्लेटफॉर्म के माध्यम से प्रत्येक लेनदेन के आधार पर)</ListItem>
             <ListItem>अद्वितीय लेनदेन संदर्भ आईडी (UTR) / बैंक आईडी</ListItem>
           </List>
+          <List>
+            <ListItem>TSP रेफरल पार्टनर PhonePe क्रेडेंशियल्स तक पहुंच प्राप्त करेगा</ListItem>
+            <ListItem>क्लाइंट PhonePe क्रेडेंशियल्स को TSP रेफरल पार्टनर के साथ साझा करने के लिए अधिकृत है</ListItem>
+            <ListItem>क्लाइंट PhonePe को TSP रेफरल पार्टनर के दायित्वों के उल्लंघन से होने वाले नुकसान से बचाता है</ListItem>
+          </List>
         </Section>
 
         <Section>
-          <SectionTitle>13. संपूर्ण समझौता</SectionTitle>
+          <SectionTitle>16. नियामक अनुपालन</SectionTitle>
+          <Paragraph>
+            PhonePe B2B सेवा शुल्क RBI/NPCI/किसी अन्य नियामक निकाय/प्राधिकरण द्वारा वृद्धि या कमी को दर्शाने के लिए समायोजित किया जा सकता है। समायोजित शुल्क PhonePe द्वारा क्लाइंट को ईमेल के माध्यम से नोटिस जारी करने पर प्रभावी होगा।
+          </Paragraph>
+        </Section>
+
+        <Section>
+          <SectionTitle>17. संपूर्ण समझौता</SectionTitle>
           <Paragraph>
             ये शर्तें आपके और अनुकम्पा फाउंडेशन के बीच संपूर्ण समझौता बनाती हैं और पिछले सभी समझौतों को प्रतिस्थापित करती हैं।
           </Paragraph>
