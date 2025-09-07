@@ -8,6 +8,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import CashfreePayment from './components/CashfreePayment';
 import PaymentSuccess from './components/PaymentSuccess';
+import { trackPageView, trackButtonClick } from './utils/analytics';
 
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
@@ -193,6 +194,20 @@ const HeroTitle = styled.h1`
   margin-bottom: 16px;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 28px;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 24px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
 `;
 
 const HeroText = styled.p`
@@ -200,6 +215,20 @@ const HeroText = styled.p`
   margin-bottom: 24px;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.6;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
 `;
 
 const HighlightedWord = styled.span`
@@ -475,6 +504,26 @@ const SocialIcon = styled.a`
   }
 `;
 
+const DeveloperCredit = styled.div`
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 14px;
+  color: #666;
+  
+  a {
+    color: #f79e31;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    
+    &:hover {
+      color: #e6891e;
+      text-decoration: underline;
+    }
+  }
+`;
+
 
 const CardTitle = styled.h3`
   font-size: 20px;
@@ -720,6 +769,10 @@ function App() {
       setIsScrolled(window.scrollY > 100);
       setShowBackToTop(window.scrollY > 300);
     };
+
+    // Track page view
+    trackPageView('Home Page');
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -917,7 +970,10 @@ function App() {
                     <PaymentMethodSelector>
                       <PaymentMethodButton
                         $active={selectedPaymentMethod === 'cashfree'}
-                        onClick={() => handlePaymentMethodSelect('cashfree')}
+                        onClick={() => {
+                          handlePaymentMethodSelect('cashfree');
+                          trackButtonClick('Online Payment', 'Donation Section');
+                        }}
                       >
                         Online Payment (Cards, UPI, Net Banking, Wallets)
                       </PaymentMethodButton>
@@ -1142,6 +1198,9 @@ function App() {
             </svg>
           </SocialIcon>
         </SocialMediaContainer>
+        <DeveloperCredit>
+          Developed by <a href="https://www.linkedin.com/in/mohnishdev/" target="_blank" rel="noopener noreferrer">Mohnish Sharma</a>
+        </DeveloperCredit>
         </Footer>
         </Container>
     </>

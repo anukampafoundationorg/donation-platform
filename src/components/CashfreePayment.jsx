@@ -10,6 +10,7 @@ import {
 } from '@cashfreepayments/pg-react';
 import { load } from '@cashfreepayments/cashfree-js';
 import { createOrder, generateOrderData } from '../utils/cashfreeApi';
+import { trackDonation, trackPaymentMethod } from '../utils/analytics';
 
 // Styled components for the payment form
 const PaymentContainer = styled.div`
@@ -17,9 +18,23 @@ const PaymentContainer = styled.div`
   margin: 0 auto;
   padding: 24px;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(74, 85, 104, 0.12);
   animation: slideIn 0.5s ease-in-out;
+  border: 1px solid rgba(247, 158, 49, 0.1);
+  
+  @media (max-width: 768px) {
+    margin: 16px;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: none;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 12px;
+    padding: 16px;
+    border-radius: 8px;
+  }
 `;
 
 const PaymentHeader = styled.div`
@@ -32,6 +47,14 @@ const PaymentTitle = styled.h3`
   margin-bottom: 8px;
   font-size: 24px;
   font-weight: 700;
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 `;
 
 const PaymentSubtitle = styled.p`
@@ -41,12 +64,23 @@ const PaymentSubtitle = styled.p`
 `;
 
 const DonationSummary = styled.div`
-  background: #f4f4f3;
-  padding: 16px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+  padding: 20px;
+  border-radius: 12px;
   margin-bottom: 24px;
   text-align: center;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(247, 158, 49, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
 `;
 
 const SummaryRow = styled.div`
@@ -91,20 +125,35 @@ const CardRow = styled.div`
 
 const PayButton = styled.button`
   width: 100%;
-  background-color: ${props => props.disabled ? '#a0a0a0' : '#f79e31'};
+  background: ${props => props.disabled ? 'linear-gradient(135deg, #a0a0a0 0%, #8a8a8a 100%)' : 'linear-gradient(135deg, #f79e31 0%, #e6891e 100%)'};
   color: #ffffff;
-  padding: 12px 24px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 18px;
   font-weight: 600;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(74, 85, 104, 0.2);
+  box-shadow: ${props => props.disabled ? 'none' : '0 4px 16px rgba(247, 158, 49, 0.2)'};
+  
+  @media (max-width: 768px) {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
   
   &:hover {
-    background-color: ${props => props.disabled ? '#a0a0a0' : '#c67e27'};
-    transform: ${props => props.disabled ? 'none' : 'scale(1.02)'};
+    background: ${props => props.disabled ? 'linear-gradient(135deg, #a0a0a0 0%, #8a8a8a 100%)' : 'linear-gradient(135deg, #e6891e 0%, #d67a0d 100%)'};
+    transform: ${props => props.disabled ? 'none' : 'translateY(-2px)'};
+    box-shadow: ${props => props.disabled ? 'none' : '0 6px 20px rgba(247, 158, 49, 0.4)'};
+  }
+  
+  &:active {
+    transform: ${props => props.disabled ? 'none' : 'translateY(0)'};
   }
 `;
 
@@ -161,6 +210,12 @@ const LoadingSpinner = styled.div`
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
+  
+  @media (max-width: 480px) {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+  }
 `;
 
 const PaymentMethodTabs = styled.div`
@@ -169,6 +224,19 @@ const PaymentMethodTabs = styled.div`
   margin-bottom: 24px;
   border-bottom: 1px solid #e2e8f0;
   padding-bottom: 16px;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    gap: 6px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 4px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+  }
 `;
 
 const PaymentMethodTab = styled.button`
@@ -183,15 +251,28 @@ const PaymentMethodTab = styled.button`
   font-size: 14px;
   flex: 1;
   
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 8px 10px;
+    font-size: 12px;
+    min-width: 0;
+  }
+  
   &:hover {
     border-color: #f79e31;
     color: #f79e31;
+    transform: translateY(-1px);
   }
   
   ${props => props.$active && `
     border-color: #f79e31;
-    background: #f79e31;
+    background: linear-gradient(135deg, #f79e31 0%, #e6891e 100%);
     color: white;
+    box-shadow: 0 2px 8px rgba(247, 158, 49, 0.3);
   `}
 `;
 
@@ -208,11 +289,21 @@ const PaymentMethodTitle = styled.h4`
 `;
 
 const UpiInstructions = styled.div`
-  background: #f8f9fa;
-  padding: 16px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 20px;
+  border-radius: 12px;
   margin-bottom: 16px;
   text-align: center;
+  border: 1px solid rgba(247, 158, 49, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const UpiStep = styled.div`
@@ -277,6 +368,9 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
     // For card payments, check if form is complete
     if (selectedPaymentMethod === 'card' && !isComplete) return;
     
+    // Track payment method selection
+    trackPaymentMethod(selectedPaymentMethod);
+    
     setIsProcessing(true);
     setError(null);
     
@@ -288,6 +382,9 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
       const orderResponse = await createOrder(orderData);
       
       if (orderResponse.success) {
+        // Track donation attempt
+        trackDonation(donationData.amount, selectedPaymentMethod, donationData.name);
+        
         // For non-card payments, use Cashfree JavaScript SDK
         if (selectedPaymentMethod !== 'card') {
           console.log('Starting Cashfree payment with session:', orderResponse.payment_session_id);
