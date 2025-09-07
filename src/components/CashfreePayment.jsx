@@ -24,6 +24,44 @@ const PaymentContainer = styled.div`
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   overflow-y: auto;
   z-index: 1000;
+  
+  /* Global styles for Cashfree components on mobile */
+  @media (max-width: 480px) {
+    /* Ensure all Cashfree components are contained */
+    .cf-card-form,
+    .cf-card-number,
+    .cf-card-holder,
+    .cf-card-expiry,
+    .cf-card-cvv,
+    .cf-save-instrument {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Fix input fields */
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      font-size: 16px !important; /* Prevent iOS zoom */
+    }
+    
+    /* Fix card row layout */
+    .cf-card-row {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 12px !important;
+      width: 100% !important;
+    }
+    
+    .cf-card-row > div {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
 `;
 
 const PaymentHeader = styled.div`
@@ -121,6 +159,44 @@ const SummaryValue = styled.span`
 
 const CashfreeWrapper = styled.div`
   margin-bottom: 24px;
+  width: 100%;
+  overflow: hidden;
+  
+  @media (max-width: 480px) {
+    margin-bottom: 20px;
+    
+    /* Ensure Cashfree components don't overflow */
+    & > div {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    /* Fix input fields on mobile */
+    input {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      font-size: 16px !important; /* Prevent zoom on iOS */
+    }
+    
+    /* Fix card form container */
+    .cf-card-form {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    /* Fix card row layout */
+    .cf-card-row {
+      display: flex !important;
+      gap: 8px !important;
+      width: 100% !important;
+    }
+    
+    .cf-card-row > div {
+      flex: 1 !important;
+      min-width: 0 !important;
+    }
+  }
 `;
 
 const CardFormContainer = styled.div`
@@ -128,14 +204,36 @@ const CardFormContainer = styled.div`
   flex-direction: column;
   gap: 16px;
   margin-bottom: 20px;
+  width: 100%;
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    margin-bottom: 16px;
+    
+    /* Ensure all child elements fit within container */
+    & > * {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+  }
 `;
 
 const CardRow = styled.div`
   display: flex;
   gap: 10px;
+  width: 100%;
   
   @media (max-width: 480px) {
+    gap: 8px;
     flex-direction: column;
+    
+    /* Ensure flex children don't overflow */
+    & > * {
+      flex: 1 !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+    }
   }
 `;
 
@@ -372,7 +470,7 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('upi');
 
   // Cashfree configuration is handled in the API utilities
 
@@ -498,18 +596,18 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
 
       <PaymentMethodTabs>
         <PaymentMethodTab
-          $active={selectedPaymentMethod === 'card'}
-          onClick={() => setSelectedPaymentMethod('card')}
-        >
-          <div style={{ fontSize: '24px' }}>💳</div>
-          <div>Card Payment</div>
-        </PaymentMethodTab>
-        <PaymentMethodTab
           $active={selectedPaymentMethod === 'upi'}
           onClick={() => setSelectedPaymentMethod('upi')}
         >
           <div style={{ fontSize: '24px' }}>📱</div>
           <div>UPI Payment</div>
+        </PaymentMethodTab>
+        <PaymentMethodTab
+          $active={selectedPaymentMethod === 'card'}
+          onClick={() => setSelectedPaymentMethod('card')}
+        >
+          <div style={{ fontSize: '24px' }}>💳</div>
+          <div>Card Payment</div>
         </PaymentMethodTab>
       </PaymentMethodTabs>
 
