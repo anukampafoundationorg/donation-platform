@@ -31,9 +31,10 @@ const PaymentContainer = styled.div`
   }
   
   @media (max-width: 480px) {
-    margin: 12px;
+    margin: 8px;
     padding: 16px;
     border-radius: 8px;
+    max-width: calc(100vw - 16px);
   }
 `;
 

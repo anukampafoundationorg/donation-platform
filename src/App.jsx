@@ -34,9 +34,32 @@ const GlobalStyle = createGlobalStyle`
     background-color: #ffffff;
     font-family: 'Poppins', sans-serif;
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
   *, *:before, *:after {
     box-sizing: inherit;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+  
+  @media (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
   }
 `;
 
@@ -67,6 +90,16 @@ const HeroWrapper = styled.div`
   height: 100vh;
   width: 100%;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    height: 100vh;
+    min-height: 600px;
+  }
+  
+  @media (max-width: 480px) {
+    height: 100vh;
+    min-height: 500px;
+  }
 `;
 
 const Header = styled.header`
@@ -83,6 +116,14 @@ const Header = styled.header`
   margin: 0;
   background: ${props => props.$isScrolled ? '#f79e31' : 'transparent'};
   transition: background 0.3s ease, box-shadow 0.3s ease;
+  
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 10px 12px;
+  }
 `;
 
 const Logo = styled.div`
@@ -90,6 +131,14 @@ const Logo = styled.div`
   font-weight: 900;
   color: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
   transition: color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 24px;
+  }
 `;
 
 const Nav = styled.nav`
@@ -178,6 +227,15 @@ const HeroContent = styled.div`
   max-width: 900px;
   padding: 20px;
   animation: ${fadeIn} 1s ease-out;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    max-width: 100%;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
 `;
 
 const HeroTagline = styled.h2`
@@ -186,6 +244,16 @@ const HeroTagline = styled.h2`
   margin-bottom: 12px;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  
+  @media (max-width: 768px) {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -384,6 +452,23 @@ const DonateButton = styled.button`
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(74, 85, 104, 0.2);
+  min-height: 44px;
+  min-width: 44px;
+  
+  @media (max-width: 768px) {
+    padding: 14px 28px;
+    font-size: 15px;
+    margin: 6px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 24px;
+    font-size: 14px;
+    margin: 4px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(74, 85, 104, 0.3);
@@ -399,6 +484,17 @@ const Form = styled.div`
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
   animation: ${slideIn} 0.5s ease-in-out;
+  
+  @media (max-width: 768px) {
+    margin: 16px;
+    padding: 20px;
+    max-width: none;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 12px;
+    padding: 16px;
+  }
 `;
 
 const Input = styled.input`
@@ -410,6 +506,21 @@ const Input = styled.input`
   font-size: 16px;
   color: #2d3748;
   transition: border-color 0.3s ease, box-shadow 0.3s;
+  min-height: 44px;
+  box-sizing: border-box;
+  
+  @media (max-width: 768px) {
+    padding: 14px 12px;
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
   &:focus {
     outline: none;
     border-color: #f79e31;
@@ -639,9 +750,17 @@ const PaymentMethodSelector = styled.div`
   gap: 16px;
   justify-content: center;
   margin-bottom: 24px;
+  
+  @media (max-width: 768px) {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
   @media (max-width: 640px) {
     flex-direction: column;
     align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 `;
 
@@ -654,6 +773,21 @@ const PaymentMethodButton = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+    font-size: 13px;
+    width: 100%;
+    margin-bottom: 8px;
+  }
   
   &:hover {
     border-color: #f79e31;
