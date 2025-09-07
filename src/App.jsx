@@ -1021,7 +1021,7 @@ function App() {
                     <HeroText>
                       <HighlightedWord>हमसे</HighlightedWord> <HighlightedWord>जुड़ें</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>इस</HighlightedWord> <HighlightedWord>नेक</HighlightedWord> <HighlightedWord>कार्य</HighlightedWord> <HighlightedWord>का</HighlightedWord> <HighlightedWord>हिस्सा</HighlightedWord> <HighlightedWord>बनें।</HighlightedWord>
                     </HeroText>
-                    <HeroButton href="#donate">👉 अभी दान करें और बदलाव की रोशनी फैलाएँ</HeroButton>
+                    <HeroButton href="#donate">👉 अभी दान करें</HeroButton>
                   </HeroContent>
                 </HeroSection>
               </HeroWrapper>

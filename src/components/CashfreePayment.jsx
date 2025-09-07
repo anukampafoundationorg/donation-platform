@@ -14,37 +14,36 @@ import { trackDonation, trackPaymentMethod } from '../utils/analytics';
 
 // Styled components for the payment form
 const PaymentContainer = styled.div`
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 24px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(74, 85, 104, 0.12);
-  animation: slideIn 0.5s ease-in-out;
-  border: 1px solid rgba(247, 158, 49, 0.1);
-  
-  @media (max-width: 768px) {
-    margin: 16px;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: none;
-  }
-  
-  @media (max-width: 480px) {
-    margin: 8px;
-    padding: 16px;
-    border-radius: 8px;
-    max-width: calc(100vw - 16px);
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  overflow-y: auto;
+  z-index: 1000;
 `;
 
 const PaymentHeader = styled.div`
+  background: linear-gradient(135deg, #f79e31 0%, #e6891e 100%);
+  color: white;
+  padding: 24px 20px;
   text-align: center;
-  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(247, 158, 49, 0.3);
+  
+  @media (max-width: 768px) {
+    padding: 20px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 16px 12px;
+  }
 `;
 
 const PaymentTitle = styled.h3`
-  color: #f79e31;
+  color: white;
   margin-bottom: 8px;
   font-size: 24px;
   font-weight: 700;
@@ -59,27 +58,43 @@ const PaymentTitle = styled.h3`
 `;
 
 const PaymentSubtitle = styled.p`
-  color: #666;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   margin: 0;
 `;
 
+const PaymentContent = styled.div`
+  padding: 24px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 16px 12px;
+  }
+`;
+
 const DonationSummary = styled.div`
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
-  padding: 20px;
-  border-radius: 12px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
   margin-bottom: 24px;
   text-align: center;
   border: 1px solid rgba(247, 158, 49, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   
   @media (max-width: 768px) {
-    padding: 16px;
+    padding: 20px;
     margin-bottom: 20px;
   }
   
   @media (max-width: 480px) {
-    padding: 12px;
+    padding: 16px;
     margin-bottom: 16px;
   }
 `;
@@ -221,64 +236,85 @@ const LoadingSpinner = styled.div`
 
 const PaymentMethodTabs = styled.div`
   display: flex;
-  gap: 8px;
+  gap: 16px;
   margin-bottom: 24px;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 16px;
-  flex-wrap: wrap;
+  justify-content: center;
   
   @media (max-width: 768px) {
-    gap: 6px;
+    gap: 12px;
     margin-bottom: 20px;
-    padding-bottom: 12px;
   }
   
   @media (max-width: 480px) {
-    gap: 4px;
+    gap: 8px;
     margin-bottom: 16px;
-    padding-bottom: 8px;
   }
 `;
 
 const PaymentMethodTab = styled.button`
-  padding: 12px 16px;
+  flex: 1;
+  padding: 20px 24px;
   border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 16px;
   background: white;
   color: #4a5568;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  font-size: 14px;
-  flex: 1;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   
   @media (max-width: 768px) {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 16px 20px;
+    font-size: 15px;
+    min-height: 90px;
   }
   
   @media (max-width: 480px) {
-    padding: 8px 10px;
-    font-size: 12px;
-    min-width: 0;
+    padding: 14px 16px;
+    font-size: 14px;
+    min-height: 80px;
+    gap: 8px;
   }
   
   &:hover {
     border-color: #f79e31;
     color: #f79e31;
-    transform: translateY(-1px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(247, 158, 49, 0.25);
   }
   
   ${props => props.$active && `
     border-color: #f79e31;
     background: linear-gradient(135deg, #f79e31 0%, #e6891e 100%);
     color: white;
-    box-shadow: 0 2px 8px rgba(247, 158, 49, 0.3);
+    box-shadow: 0 8px 24px rgba(247, 158, 49, 0.4);
+    transform: translateY(-3px);
   `}
 `;
 
 const PaymentMethodContent = styled.div`
-  min-height: 200px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(247, 158, 49, 0.1);
+  margin-bottom: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
 `;
 
 const PaymentMethodTitle = styled.h4`
@@ -427,10 +463,13 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
           <PaymentTitle>Payment Successful!</PaymentTitle>
           <PaymentSubtitle>Thank you for your generous donation</PaymentSubtitle>
         </PaymentHeader>
-        <SuccessMessage>{success}</SuccessMessage>
-        <BackButton onClick={onBack}>
-          Make Another Donation
-        </BackButton>
+        
+        <PaymentContent>
+          <SuccessMessage>{success}</SuccessMessage>
+          <BackButton onClick={onBack}>
+            Make Another Donation
+          </BackButton>
+        </PaymentContent>
       </PaymentContainer>
     );
   }
@@ -438,9 +477,11 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
   return (
     <PaymentContainer>
       <PaymentHeader>
-        <PaymentTitle>Card Payment</PaymentTitle>
+        <PaymentTitle>Secure Payment</PaymentTitle>
         <PaymentSubtitle>Complete your donation securely</PaymentSubtitle>
       </PaymentHeader>
+      
+      <PaymentContent>
       
       <DonationSummary>
         <SummaryRow>
@@ -460,25 +501,15 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
           $active={selectedPaymentMethod === 'card'}
           onClick={() => setSelectedPaymentMethod('card')}
         >
-          💳 Card
+          <div style={{ fontSize: '24px' }}>💳</div>
+          <div>Card Payment</div>
         </PaymentMethodTab>
         <PaymentMethodTab
           $active={selectedPaymentMethod === 'upi'}
           onClick={() => setSelectedPaymentMethod('upi')}
         >
-          📱 UPI
-        </PaymentMethodTab>
-        <PaymentMethodTab
-          $active={selectedPaymentMethod === 'netbanking'}
-          onClick={() => setSelectedPaymentMethod('netbanking')}
-        >
-          🏦 Net Banking
-        </PaymentMethodTab>
-        <PaymentMethodTab
-          $active={selectedPaymentMethod === 'app'}
-          onClick={() => setSelectedPaymentMethod('app')}
-        >
-          📱 App
+          <div style={{ fontSize: '24px' }}>📱</div>
+          <div>UPI Payment</div>
         </PaymentMethodTab>
       </PaymentMethodTabs>
 
@@ -558,72 +589,9 @@ const CashfreePayment = ({ donationData, onPaymentSuccess, onBack }) => {
           </>
         )}
 
-        {selectedPaymentMethod === 'netbanking' && (
-          <>
-            <PaymentMethodTitle>Net Banking</PaymentMethodTitle>
-            <UpiInstructions>
-              <UpiStep>
-                <UpiStepNumber>1</UpiStepNumber>
-                Click "Pay with Net Banking" to open Cashfree's secure payment page
-              </UpiStep>
-              <UpiStep>
-                <UpiStepNumber>2</UpiStepNumber>
-                Select your bank from the list and complete payment
-              </UpiStep>
-              <UpiStep>
-                <UpiStepNumber>3</UpiStepNumber>
-                You'll be redirected back to our website after payment
-              </UpiStep>
-            </UpiInstructions>
-            <PayButton
-              onClick={handlePayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <LoadingSpinner />
-                  Processing...
-                </>
-              ) : (
-                'Pay with Net Banking'
-              )}
-            </PayButton>
-          </>
-        )}
-
-        {selectedPaymentMethod === 'app' && (
-          <>
-            <PaymentMethodTitle>App Payment</PaymentMethodTitle>
-            <UpiInstructions>
-              <UpiStep>
-                <UpiStepNumber>1</UpiStepNumber>
-                Click "Pay with App" to open Cashfree's secure payment page
-              </UpiStep>
-              <UpiStep>
-                <UpiStepNumber>2</UpiStepNumber>
-                Select your preferred payment app (Paytm, PhonePe, Google Pay, etc.) and complete payment
-              </UpiStep>
-              <UpiStep>
-                <UpiStepNumber>3</UpiStepNumber>
-                You'll be redirected back to our website after payment
-              </UpiStep>
-            </UpiInstructions>
-            <PayButton
-              onClick={handlePayment}
-              disabled={isProcessing}
-            >
-              {isProcessing ? (
-                <>
-                  <LoadingSpinner />
-                  Processing...
-                </>
-              ) : (
-                'Pay with App'
-              )}
-            </PayButton>
-          </>
-        )}
       </PaymentMethodContent>
+      
+      </PaymentContent>
 
       <BackButton onClick={onBack}>
         Back to Payment Options
