@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import cowImage from './assets/cowHero1.jpg';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import StoryDetail from './components/StoryDetail';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsConditions from './components/TermsConditions';
-import CashfreePayment from './components/CashfreePayment';
-import PaymentSuccess from './components/PaymentSuccess';
-import { trackPageView, trackButtonClick } from './utils/analytics';
+// import { stories } from './data/stories';
 
 import cow1 from './assets/cowimg1.jpeg';
 import cow2 from './assets/cowimg2.jpeg';
@@ -19,6 +15,7 @@ import cow6 from './assets/cowimg6.jpeg';
 import cow7 from './assets/cowimg7.jpeg';
 import cow8 from './assets/cowimg8.jpeg';
 import cow9 from './assets/cowimg9.jpeg';
+import upiQR from './assets/upi.jpeg';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -34,32 +31,9 @@ const GlobalStyle = createGlobalStyle`
     background-color: #ffffff;
     font-family: 'Poppins', sans-serif;
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent;
   }
   *, *:before, *:after {
     box-sizing: inherit;
-  }
-  
-  /* Prevent zoom on input focus on iOS */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  textarea,
-  select {
-    font-size: 16px !important;
-  }
-  
-  @media (max-width: 768px) {
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="number"],
-    textarea,
-    select {
-      font-size: 16px !important;
-    }
   }
 `;
 
@@ -73,6 +47,13 @@ const slideIn = keyframes`
   from { opacity: 0; transform: translateX(-20px); }
   to { opacity: 1; transform: translateX(0); }
 `;
+
+const slideInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+// Removed unused animations
 
 const Container = styled.div`
   font-family: 'Poppins', sans-serif;
@@ -90,16 +71,6 @@ const HeroWrapper = styled.div`
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  
-  @media (max-width: 768px) {
-    height: 100vh;
-    min-height: 600px;
-  }
-  
-  @media (max-width: 480px) {
-    height: 100vh;
-    min-height: 500px;
-  }
 `;
 
 const Header = styled.header`
@@ -116,14 +87,6 @@ const Header = styled.header`
   margin: 0;
   background: ${props => props.$isScrolled ? '#f79e31' : 'transparent'};
   transition: background 0.3s ease, box-shadow 0.3s ease;
-  
-  @media (max-width: 768px) {
-    padding: 12px 16px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 10px 12px;
-  }
 `;
 
 const Logo = styled.div`
@@ -131,14 +94,6 @@ const Logo = styled.div`
   font-weight: 900;
   color: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
   transition: color 0.3s ease;
-  
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
 `;
 
 const Nav = styled.nav`
@@ -215,111 +170,88 @@ const HeroSection = styled.section`
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   text-align: center;
   color: #2d3748;
   z-index: 5;
+  
+  /* Simple overlay for text readability */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+  }
 `;
 
 const HeroContent = styled.div`
-  max-width: 900px;
-  padding: 20px;
+  max-width: 800px;
+  padding: 0 20px;
   animation: ${fadeIn} 1s ease-out;
-  
-  @media (max-width: 768px) {
-    padding: 16px;
-    max-width: 100%;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px;
-  }
-`;
-
-const HeroTagline = styled.h2`
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  
-  @media (max-width: 768px) {
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
+  position: relative;
+  z-index: 2;
 `;
 
 const HeroTitle = styled.h1`
   font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #ffffff;
   line-height: 1.2;
-  text-align: center;
   
   @media (max-width: 768px) {
-    font-size: 28px;
-    line-height: 1.3;
-    margin-bottom: 12px;
+    font-size: 36px;
+    margin-bottom: 20px;
   }
   
   @media (max-width: 480px) {
-    font-size: 24px;
-    line-height: 1.4;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 16px;
   }
 `;
 
 const HeroText = styled.p`
-  font-size: 20px;
-  margin-bottom: 24px;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-size: 18px;
+  margin-bottom: 32px;
+  color: #ffffff;
   line-height: 1.6;
-  text-align: center;
+  opacity: 0.9;
   
   @media (max-width: 768px) {
     font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 16px;
+    margin-bottom: 28px;
   }
   
   @media (max-width: 480px) {
     font-size: 14px;
-    line-height: 1.4;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
   }
 `;
 
-const HighlightedWord = styled.span`
-  background: rgba(0, 0, 0, 0.2);
-  padding: 2px 4px;
-  border-radius: 4px;
-  margin: 0 2px;
-  backdrop-filter: blur(2px);
-`;
-
 const HeroButton = styled.a`
-  background-color: #f79e31;
+  background: #f79e31;
   color: #ffffff;
-  padding: 12px 32px;
+  padding: 16px 32px;
   text-decoration: none;
-  border-radius: 9999px;
-  font-size: 18px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 600;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
+  display: inline-block;
+  
   &:hover {
-    background-color: #c67e27;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #c67e27;
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 14px 28px;
+    font-size: 14px;
   }
 `;
 
@@ -433,7 +365,7 @@ const DonateSection = styled.section`
   animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
-const ButtonGroup = styled.div`
+const DonateButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -452,23 +384,6 @@ const DonateButton = styled.button`
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(74, 85, 104, 0.2);
-  min-height: 44px;
-  min-width: 44px;
-  
-  @media (max-width: 768px) {
-    padding: 14px 28px;
-    font-size: 15px;
-    margin: 6px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px 24px;
-    font-size: 14px;
-    margin: 4px;
-    width: 100%;
-    max-width: 300px;
-  }
-  
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(74, 85, 104, 0.3);
@@ -484,17 +399,6 @@ const Form = styled.div`
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
   animation: ${slideIn} 0.5s ease-in-out;
-  
-  @media (max-width: 768px) {
-    margin: 16px;
-    padding: 20px;
-    max-width: none;
-  }
-  
-  @media (max-width: 480px) {
-    margin: 12px;
-    padding: 16px;
-  }
 `;
 
 const Input = styled.input`
@@ -506,21 +410,6 @@ const Input = styled.input`
   font-size: 16px;
   color: #2d3748;
   transition: border-color 0.3s ease, box-shadow 0.3s;
-  min-height: 44px;
-  box-sizing: border-box;
-  
-  @media (max-width: 768px) {
-    padding: 14px 12px;
-    font-size: 16px;
-    margin-bottom: 14px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  
   &:focus {
     outline: none;
     border-color: #f79e31;
@@ -569,73 +458,6 @@ const MissionCard = styled.div`
   color: #2d3748;
 `;
 
-const Footer = styled.footer`
-  background-color: #f4f4f3;
-  color: #2d3748;
-  padding: 24px;
-  text-align: center;
-  width: 100%;
-  margin: 0;
-`;
-
-const FooterLink = styled(Link)`
-  color: #f79e31;
-  margin: 0 16px;
-  text-decoration: none;
-  transition: text-decoration 0.3s;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const SocialMediaContainer = styled.div`
-  margin: 16px 0;
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-`;
-
-const SocialIcon = styled.a`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: #f79e31;
-  color: #ffffff;
-  border-radius: 50%;
-  text-decoration: none;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  &:hover {
-    background-color: #c67e27;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const DeveloperCredit = styled.div`
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 14px;
-  color: #666;
-  
-  a {
-    color: #f79e31;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-    
-    &:hover {
-      color: #e6891e;
-      text-decoration: underline;
-    }
-  }
-`;
-
-
 const CardTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
@@ -648,6 +470,26 @@ const CardText = styled.p`
   margin-bottom: 16px;
 `;
 
+const Footer = styled.footer`
+  background-color: #f4f4f3;
+  color: #2d3748;
+  padding: 24px;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+`;
+
+const FooterLink = styled.a`
+  color: #f79e31;
+  margin: 0 16px;
+  text-decoration: none;
+  transition: text-decoration 0.3s;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+// Removed unused story components
 
 const BackToTop = styled.button`
   position: fixed;
@@ -704,6 +546,30 @@ const HeroSlide = styled.div`
   height: 100vh !important;
   background: url(${props => props.image}) no-repeat center center/cover;
   background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  
+  /* Enhanced image overlay for better text readability */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.5) 30%,
+      rgba(0, 0, 0, 0.4) 70%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    z-index: 1;
+  }
+  
+  @media (max-width: 768px) {
+    background-attachment: scroll;
+  }
 `;
 
 // Payment option components
@@ -730,7 +596,25 @@ const DonationSummary = styled.div`
   text-align: center;
 `;
 
+// Removed unused payment method components
 
+const QRCodeContainer = styled.div`
+  width: 200px;
+  height: 200px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px auto;
+  overflow: hidden;
+`;
+
+const QRCodeImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
 
 const BackButton = styled.button`
   background: #e2e8f0;
@@ -750,17 +634,9 @@ const PaymentMethodSelector = styled.div`
   gap: 16px;
   justify-content: center;
   margin-bottom: 24px;
-  
-  @media (max-width: 768px) {
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  
   @media (max-width: 640px) {
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
   }
 `;
 
@@ -773,21 +649,6 @@ const PaymentMethodButton = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  min-height: 44px;
-  min-width: 44px;
-  text-align: center;
-  
-  @media (max-width: 768px) {
-    padding: 14px 20px;
-    font-size: 14px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px 16px;
-    font-size: 13px;
-    width: 100%;
-    margin-bottom: 8px;
-  }
   
   &:hover {
     border-color: #f79e31;
@@ -835,59 +696,6 @@ const BankDetailValue = styled.span`
   font-size: 14px;
 `;
 
-// Team Styled Components
-const TeamContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
-  
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-`;
-
-const TeamMember = styled.div`
-  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #f79e31;
-  }
-`;
-
-const TeamPosition = styled.h3`
-  color: #f79e31;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #f79e31;
-`;
-
-const TeamName = styled.p`
-  color: #2d3748;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 8px 0;
-  line-height: 1.4;
-`;
-
-const TeamLocation = styled.p`
-  color: #718096;
-  font-size: 14px;
-  font-style: italic;
-  margin: 4px 0;
-`;
-
 // React Component
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -903,10 +711,6 @@ function App() {
       setIsScrolled(window.scrollY > 100);
       setShowBackToTop(window.scrollY > 300);
     };
-
-    // Track page view
-    trackPageView('Home Page');
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -938,12 +742,6 @@ function App() {
 
   const handlePaymentMethodSelect = (method) => {
     setSelectedPaymentMethod(method);
-  };
-
-  const handlePaymentSuccess = () => {
-    setDonationData(null);
-    setSelectedAmount('');
-    setSelectedPaymentMethod(null);
   };
 
   const galleryImages = [
@@ -994,34 +792,23 @@ function App() {
                     <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
-                    <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
-                    <NavLink $isScrolled={isScrolled} to="/#team" onClick={() => setIsNavOpen(false)}>हमारी टीम</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                   </Nav>
                 </Header>
                 <HeroSection id="home">
                   <HeroContent>
-                    <HeroTagline>
-                      <HighlightedWord>अनुकम्पा</HighlightedWord>
-                    </HeroTagline>
                     <HeroTitle>
-                      <HighlightedWord>हमारे</HighlightedWord> <HighlightedWord>साथ</HighlightedWord> <HighlightedWord>जुड़ें</HighlightedWord> <HighlightedWord>इस</HighlightedWord> <HighlightedWord>पवित्र</HighlightedWord> <HighlightedWord>अभियान</HighlightedWord> <HighlightedWord>में</HighlightedWord>
+                      गायों, बुजुर्गों और मानवता के लिए करुणा
                     </HeroTitle>
                     <HeroText>
-                      <HighlightedWord>जहाँ</HighlightedWord> <HighlightedWord>हमारा</HighlightedWord> <HighlightedWord>उद्देश्य</HighlightedWord> <HighlightedWord>है</HighlightedWord> <HighlightedWord>प्रेम,</HighlightedWord> <HighlightedWord>करुणा</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>सेवा</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>माध्यम</HighlightedWord> <HighlightedWord>से</HighlightedWord> <HighlightedWord>एक</HighlightedWord> <HighlightedWord>दयालु</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>परोपकारी</HighlightedWord> <HighlightedWord>समाज</HighlightedWord> <HighlightedWord>का</HighlightedWord> <HighlightedWord>निर्माण</HighlightedWord> <HighlightedWord>करना।</HighlightedWord>
+                      गाय बचाव, बुजुर्गों की देखभाल और समुदायिक कल्याण कार्यक्रमों के माध्यम से करुणा फैलाने में हमारे साथ जुड़ें।
                     </HeroText>
-                    <HeroText>
-                      <HighlightedWord>हम</HighlightedWord> <HighlightedWord>गौसेवा,</HighlightedWord> <HighlightedWord>वरिष्ठ</HighlightedWord> <HighlightedWord>नागरिकों</HighlightedWord> <HighlightedWord>की</HighlightedWord> <HighlightedWord>देखभाल</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>सामुदायिक</HighlightedWord> <HighlightedWord>कल्याण</HighlightedWord> <HighlightedWord>जैसे</HighlightedWord> <HighlightedWord>कार्यों</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>जरिए</HighlightedWord> <HighlightedWord>समाज</HighlightedWord> <HighlightedWord>में</HighlightedWord> <HighlightedWord>भलाई</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>अपनापन</HighlightedWord> <HighlightedWord>फैलाने</HighlightedWord> <HighlightedWord>के</HighlightedWord> <HighlightedWord>लिए</HighlightedWord> <HighlightedWord>समर्पित</HighlightedWord> <HighlightedWord>हैं।</HighlightedWord>
-                    </HeroText>
-                    <HeroText>
-                      <HighlightedWord>आपका</HighlightedWord> <HighlightedWord>छोटा-सा</HighlightedWord> <HighlightedWord>योगदान</HighlightedWord> <HighlightedWord>भी</HighlightedWord> <HighlightedWord>किसी</HighlightedWord> <HighlightedWord>ज़िंदगी</HighlightedWord> <HighlightedWord>में</HighlightedWord> <HighlightedWord>बड़ा</HighlightedWord> <HighlightedWord>बदलाव</HighlightedWord> <HighlightedWord>ला</HighlightedWord> <HighlightedWord>सकता</HighlightedWord> <HighlightedWord>है।</HighlightedWord>
-                    </HeroText>
-                    <HeroText>
-                      <HighlightedWord>हमसे</HighlightedWord> <HighlightedWord>जुड़ें</HighlightedWord> <HighlightedWord>और</HighlightedWord> <HighlightedWord>इस</HighlightedWord> <HighlightedWord>नेक</HighlightedWord> <HighlightedWord>कार्य</HighlightedWord> <HighlightedWord>का</HighlightedWord> <HighlightedWord>हिस्सा</HighlightedWord> <HighlightedWord>बनें।</HighlightedWord>
-                    </HeroText>
-                    <HeroButton href="#donate">👉 अभी दान करें</HeroButton>
+                    <HeroButton href="#donate">
+                      अब दान करें
+                    </HeroButton>
                   </HeroContent>
                 </HeroSection>
               </HeroWrapper>
@@ -1038,7 +825,6 @@ function App() {
                   />
                 </YouTubeWrapper>
               </Section>
-              
               <DonateSection id="donate">
                 <Title>दान करें</Title>
                 <Text>
@@ -1047,7 +833,7 @@ function App() {
                 
                 {!donationData ? (
                   <>
-                    <ButtonGroup>
+                    <DonateButtonGroup>
                       <DonateButton 
                         onClick={() => handleAmountSelect('500')}
                         style={{ backgroundColor: selectedAmount === '500' ? '#c67e27' : '#f79e31' }}
@@ -1079,7 +865,7 @@ function App() {
                           }}
                         />
                       </div>
-                    </ButtonGroup>
+                    </DonateButtonGroup>
                     <Form as="form" onSubmit={handleDonationSubmit}>
                       <Input 
                         type="text" 
@@ -1103,13 +889,10 @@ function App() {
                     
                     <PaymentMethodSelector>
                       <PaymentMethodButton
-                        $active={selectedPaymentMethod === 'cashfree'}
-                        onClick={() => {
-                          handlePaymentMethodSelect('cashfree');
-                          trackButtonClick('Online Payment', 'Donation Section');
-                        }}
+                        $active={selectedPaymentMethod === 'upi'}
+                        onClick={() => handlePaymentMethodSelect('upi')}
                       >
-                        Online Payment (Cards, UPI, Net Banking, Wallets)
+                        UPI Payment
                       </PaymentMethodButton>
                       <PaymentMethodButton
                         $active={selectedPaymentMethod === 'neft'}
@@ -1119,12 +902,20 @@ function App() {
                       </PaymentMethodButton>
                     </PaymentMethodSelector>
                     
-                    {selectedPaymentMethod === 'cashfree' && (
-                      <CashfreePayment
-                        donationData={donationData}
-                        onPaymentSuccess={handlePaymentSuccess}
-                        onBack={() => setSelectedPaymentMethod(null)}
-                      />
+                    {selectedPaymentMethod === 'upi' && (
+                      <div style={{ textAlign: 'center' }}>
+                        <h4 style={{ color: '#f79e31', marginBottom: '16px' }}>UPI भुगतान</h4>
+                        <QRCodeContainer>
+                          <QRCodeImage src={upiQR} alt="UPI QR Code" />
+                        </QRCodeContainer>
+                        <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+                          QR कोड स्कैन करें और भुगतान करें
+                        </p>
+                        <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginBottom: '24px', lineHeight: '1.5' }}>
+                          कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
+                          <strong>anukampafoundation.org@gmail.com</strong>
+                        </p>
+                      </div>
                     )}
                     
                     {selectedPaymentMethod === 'neft' && (
@@ -1157,7 +948,7 @@ function App() {
                         </p>
                         <p style={{ fontSize: '13px', color: '#f79e31', backgroundColor: '#fff3e0', padding: '12px', borderRadius: '8px', marginTop: '16px', lineHeight: '1.5', textAlign: 'center' }}>
                           कर छूट के लिए कृपया भुगतान का स्क्रीनशॉट और विवरण इस ईमेल पर भेजें:<br />
-                          <strong>anukampafoundationorg@gmail.com</strong>
+                          <strong>anukampafoundation.org@gmail.com</strong>
                         </p>
                       </div>
                     )}
@@ -1182,42 +973,6 @@ function App() {
                   ))}
                 </GalleryGrid>
               </Section>
-              
-              <Section id="team">
-                <Title>हमारी टीम</Title>
-                <TeamContainer>
-                  <TeamMember>
-                    <TeamPosition>डायरेक्टर</TeamPosition>
-                    <TeamName>ओम प्रकाश जैन</TeamName>
-                    <TeamName>उषा जैन</TeamName>
-                    <TeamName>निहाल जैन</TeamName>
-                  </TeamMember>
-                  
-                  <TeamMember>
-                    <TeamPosition>राष्ट्रीय अध्यक्ष</TeamPosition>
-                    <TeamName>कालू लाल जी सालेचा</TeamName>
-                    <TeamLocation>भवानी मंडी</TeamLocation>
-                  </TeamMember>
-                  
-                  <TeamMember>
-                    <TeamPosition>राष्ट्रीय महासचिव</TeamPosition>
-                    <TeamName>संजय जैन फुलेरा</TeamName>
-                    <TeamLocation> पिपलोन</TeamLocation>
-                  </TeamMember>
-                  
-                  <TeamMember>
-                    <TeamPosition>राष्ट्रीय उपाध्यक्ष</TeamPosition>
-                    <TeamName>श्रीमती शारदा जवाहर जी चौधरी</TeamName>
-                  </TeamMember>
-                  
-                  <TeamMember>
-                    <TeamPosition>राष्ट्रीय प्रमुख मार्गदर्शक</TeamPosition>
-                    <TeamName>श्री मोहनलाल जी मेहता</TeamName>
-                    <TeamLocation>रावटी</TeamLocation>
-                  </TeamMember>
-                </TeamContainer>
-              </Section>
-              
               <Section id="mission" bg="#f4f4f3">
                 <Title>हमारा मिशन</Title>
                 <Text>
@@ -1285,9 +1040,6 @@ function App() {
               <StoryDetail />
             </>
           } />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermsConditions />} />
         </Routes>
         {showBackToTop && (
           <BackToTop visible={showBackToTop} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -1301,42 +1053,13 @@ function App() {
           </Modal>
         )}
         <Footer>
-        <p>&copy; 2025 गौशाला आश्रय। सभी अधिकार सुरक्षित।</p>
-        <div style={{ marginTop: "8px" }}>
-        <FooterLink to="/privacy-policy">
-        गोपनीयता नीति
-        </FooterLink>
-        <FooterLink to="/terms-conditions">
-        सेवा की शर्तें
-        </FooterLink>
-        </div>
-        <SocialMediaContainer>
-          <SocialIcon href="https://linkedin.com/company/anukampa-foundation" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://facebook.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Facebook">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://instagram.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Instagram">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://twitter.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Twitter">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-            </svg>
-          </SocialIcon>
-        </SocialMediaContainer>
-        <DeveloperCredit>
-          Developed by <a href="https://www.linkedin.com/in/mohnishdev/" target="_blank" rel="noopener noreferrer">Mohnish Sharma</a>
-        </DeveloperCredit>
+          <p>&copy; 2025 गौशाला आश्रय। सभी अधिकार सुरक्षित।</p>
+          <div style={{ marginTop: '8px' }}>
+            <FooterLink href="#">गोपनीयता नीति</FooterLink>
+            <FooterLink href="#">सेवा की शर्तें</FooterLink>
+          </div>
         </Footer>
-        </Container>
+      </Container>
     </>
   );
 }
