@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "nodemailer": "^7.0.6",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.6.0"
   }
 }

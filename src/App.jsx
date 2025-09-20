@@ -8,6 +8,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import CashfreePayment from './components/CashfreePayment';
 import PaymentSuccess from './components/PaymentSuccess';
+import DonationCategories from './components/DonationCategories';
 import { trackPageView, trackButtonClick } from './utils/analytics';
 
 import cow1 from './assets/cowimg1.jpeg';
@@ -31,14 +32,31 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
-    background-color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
+    line-height: 1.6;
+    color: #1a202c;
   }
   *, *:before, *:after {
     box-sizing: inherit;
+  }
+  
+  /* Premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #e97e31 0%, #f79e31 100%);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #d86d20 0%, #e6891e 100%);
   }
   
   /* Prevent zoom on input focus on iOS */
@@ -49,6 +67,7 @@ const GlobalStyle = createGlobalStyle`
   textarea,
   select {
     font-size: 16px !important;
+    font-family: 'Inter', sans-serif;
   }
   
   @media (max-width: 768px) {
@@ -65,24 +84,49 @@ const GlobalStyle = createGlobalStyle`
 
 // Animations
 const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
 `;
 
 const slideIn = keyframes`
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { 
+    opacity: 0; 
+    transform: translateX(-30px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0);
+  }
 `;
 
+const scaleIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+
 const Container = styled.div`
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
   width: 100%;
-  color: #2d3748;
+  color: #1a202c;
   position: relative;
   min-height: 100vh;
   height: 100%;
+  background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
 `;
 
 const HeroWrapper = styled.div`
@@ -161,8 +205,9 @@ const Logo = styled.div`
 
 const Nav = styled.nav`
   display: flex;
-  gap: 24px;
-  transition: all 0.3s ease-in-out;
+  gap: 32px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
   @media (max-width: 768px) {
     display: ${props => (props.$isOpen ? 'flex' : 'none')};
     flex-direction: column;
@@ -170,31 +215,55 @@ const Nav = styled.nav`
     top: 100%;
     left: 0;
     right: 0;
-    background: #f4f4f3;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(74, 85, 104, 0.1);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(247, 158, 49, 0.2);
     z-index: 9999;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: ${fadeIn} 0.3s ease-out;
   }
 `;
 
 const NavLink = styled(HashLink)`
   color: ${props => props.$isScrolled ? '#ffffff' : '#f79e31'};
   text-decoration: none;
-  font-size: 18px;
-  font-weight: 700;
-  transition: color 0.3s, transform 0.3s;
-  &:hover {
-    color: ${props => props.$isScrolled ? '#ffffff' : '#c67e27'};
-    transform: translateY(-2px);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.025em;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #f79e31, #e97e31);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  
+  &:hover {
+    color: ${props => props.$isScrolled ? '#f1f5f9' : '#e97e31'};
+    transform: translateY(-1px);
+    
+    &::after {
+      width: 100%;
+    }
+  }
+  
   @media (max-width: 768px) {
-    color: #f79e31;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 10px 0;
+    color: #2d3748;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 0;
+    
     &:hover {
-      color: #c67e27;
+      color: #f79e31;
     }
   }
 `;
@@ -277,50 +346,62 @@ const HeroTagline = styled.h2`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 48px;
-  font-weight: bold;
-  margin-bottom: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 20px;
   color: white;
   text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.8),
-    0px 0px 8px rgba(0, 0, 0, 0.6),
-    1px 1px 2px rgba(0, 0, 0, 0.9);
-  line-height: 1.2;
+    2px 2px 8px rgba(0, 0, 0, 0.7),
+    0px 0px 16px rgba(0, 0, 0, 0.5),
+    1px 1px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
   text-align: center;
+  letter-spacing: -0.02em;
+  animation: ${fadeIn} 1s ease-out;
   
   @media (max-width: 768px) {
-    font-size: 28px;
-    line-height: 1.3;
-    margin-bottom: 12px;
-  }
-  
-  @media (max-width: 480px) {
-    font-size: 24px;
-    line-height: 1.4;
-    margin-bottom: 10px;
-  }
-`;
-
-const HeroText = styled.p`
-  font-size: 20px;
-  margin-bottom: 24px;
-  color: white;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.8),
-    0px 0px 6px rgba(0, 0, 0, 0.6);
-  line-height: 1.6;
-  text-align: center;
-  
-  @media (max-width: 768px) {
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 36px;
+    line-height: 1.2;
     margin-bottom: 16px;
   }
   
   @media (max-width: 480px) {
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 28px;
+    line-height: 1.3;
     margin-bottom: 12px;
+  }
+`;
+
+const HeroText = styled.p`
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 32px;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 
+    2px 2px 8px rgba(0, 0, 0, 0.7),
+    0px 0px 12px rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: -0.01em;
+  animation: ${fadeIn} 1.2s ease-out;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    max-width: 500px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    max-width: 400px;
   }
 `;
 
@@ -330,31 +411,59 @@ const HighlightedWord = styled.span`
 `;
 
 const HeroButton = styled.a`
-  background-color: #f79e31;
+  background: linear-gradient(135deg, #f79e31 0%, #e97e31 100%);
   color: #ffffff;
-  padding: 12px 32px;
+  padding: 16px 40px;
   text-decoration: none;
-  border-radius: 9999px;
+  border-radius: 50px;
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
   font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(247, 158, 49, 0.4);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.025em;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 32px rgba(247, 158, 49, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  text-shadow: none;
+  position: relative;
+  overflow: hidden;
+  animation: ${scaleIn} 1.4s ease-out;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+  }
   
   &:hover {
-    background-color: #c67e27;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(247, 158, 49, 0.6);
+    background: linear-gradient(135deg, #e97e31 0%, #d86d20 100%);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+      0 12px 40px rgba(247, 158, 49, 0.5),
+      0 4px 16px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(-1px) scale(1.01);
   }
   
   @media (max-width: 768px) {
     font-size: 16px;
-    padding: 10px 28px;
+    padding: 14px 32px;
   }
   
   @media (max-width: 480px) {
-    font-size: 14px;
-    padding: 8px 24px;
+    font-size: 15px;
+    padding: 12px 28px;
   }
 `;
 
@@ -368,18 +477,62 @@ const Section = styled.section`
 `;
 
 const Title = styled.h2`
-  font-size: 36px;
-  font-weight: bold;
-  color: #f79e31;
-  margin-bottom: 24px;
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 32px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  position: relative;
+  animation: ${fadeIn} 0.8s ease-out;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #f79e31, #e97e31);
+    border-radius: 2px;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 36px;
+    margin-bottom: 28px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 30px;
+    margin-bottom: 24px;
+  }
 `;
 
 const Text = styled.p`
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
-  color: #2d3748;
+  font-weight: 400;
+  color: #4a5568;
+  line-height: 1.7;
   max-width: 800px;
   margin: 0 auto 32px;
-  transition: none;
+  text-align: center;
+  letter-spacing: -0.01em;
+  animation: ${fadeIn} 1s ease-out;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
 `;
 
 // YouTube iframe components
@@ -512,55 +665,81 @@ const DonateButton = styled.button`
 `;
 
 const Form = styled.div`
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 24px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
-  animation: ${slideIn} 0.5s ease-in-out;
+  padding: 32px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(247, 158, 49, 0.1);
+  animation: ${scaleIn} 0.6s ease-out;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #f79e31, #e97e31);
+    border-radius: 20px 20px 0 0;
+  }
   
   @media (max-width: 768px) {
-    margin: 16px;
-    padding: 20px;
+    margin: 20px;
+    padding: 28px;
     max-width: none;
   }
   
   @media (max-width: 480px) {
-    margin: 12px;
-    padding: 16px;
+    margin: 16px;
+    padding: 24px;
   }
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  border: 1px solid #4a5568;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  font-family: 'Inter', sans-serif;
   font-size: 16px;
+  font-weight: 400;
   color: #2d3748;
-  transition: border-color 0.3s ease, box-shadow 0.3s;
-  min-height: 44px;
+  background: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 52px;
   box-sizing: border-box;
-  
-  @media (max-width: 768px) {
-    padding: 14px 12px;
-    font-size: 16px;
-    margin-bottom: 14px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 12px;
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
   
   &:focus {
     outline: none;
     border-color: #f79e31;
-    box-shadow: 0 0 0 3px rgba(247, 158, 49, 0.2);
+    box-shadow: 0 0 0 3px rgba(247, 158, 49, 0.1);
+    transform: translateY(-1px);
   }
+  
+  &::placeholder {
+    color: #a0aec0;
+    font-weight: 400;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 14px 16px;
+    font-size: 16px;
+    margin-bottom: 18px;
+    min-height: 48px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
   &::placeholder {
     color: #a0aec0;
   }
@@ -568,20 +747,54 @@ const Input = styled.input`
 
 const SubmitButton = styled.button`
   width: 100%;
-  background-color: #f79e31;
+  background: linear-gradient(135deg, #f79e31 0%, #e97e31 100%);
   color: #ffffff;
-  padding: 12px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
   font-size: 18px;
   font-weight: 600;
+  letter-spacing: -0.025em;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(74, 85, 104, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 32px rgba(247, 158, 49, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s;
+  }
+  
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(74, 85, 104, 0.3);
-    background-color: #c67e27;
+    background: linear-gradient(135deg, #e97e31 0%, #d86d20 100%);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 40px rgba(247, 158, 49, 0.4),
+      0 4px 16px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
 `;
 
@@ -884,6 +1097,463 @@ const DeveloperCredit = styled.div`
 `;
 
 
+
+// Railway Station Food Service Styled Components
+const RailwayServiceSection = styled.section`
+  padding: 60px 20px;
+  width: 100%;
+  margin: 0;
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  color: #2d3748;
+  text-align: center;
+  border-top: 4px solid #38a169;
+  
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 30px 12px;
+  }
+`;
+
+const RailwayServiceCard = styled.div`
+  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+  border: 2px solid #38a169;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 700px;
+  margin: 0 auto;
+  box-shadow: 0 12px 40px rgba(56, 161, 105, 0.15);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #38a169 0%, #2f855a 100%);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 30px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 24px;
+  }
+`;
+
+const RailwayIcon = styled.div`
+  font-size: 64px;
+  margin-bottom: 20px;
+  
+  @media (max-width: 768px) {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+`;
+
+const RailwayTitle = styled.h2`
+  color: #38a169;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+`;
+
+const RailwayDescription = styled.p`
+  color: #4a5568;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+`;
+
+const RailwayStats = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 24px 0;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+`;
+
+const RailwayStat = styled.div`
+  background: #f7fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  
+  @media (max-width: 768px) {
+    padding: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+`;
+
+const RailwayStatNumber = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  color: #38a169;
+  margin-bottom: 4px;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+`;
+
+const RailwayStatLabel = styled.div`
+  font-size: 14px;
+  color: #4a5568;
+  
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
+`;
+
+const RailwayContactInfo = styled.div`
+  background: #f0fff4;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 24px 0;
+  border: 1px solid #38a169;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    margin: 20px 0;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 14px;
+    margin: 16px 0;
+  }
+`;
+
+const RailwayContactTitle = styled.h4`
+  color: #38a169;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+`;
+
+const RailwayContactDetails = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+`;
+
+const RailwayContactItem = styled.div`
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    text-align: left;
+  }
+`;
+
+const ContactLabel = styled.div`
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 4px;
+`;
+
+const ContactValue = styled.div`
+  font-size: 16px;
+  color: #2d3748;
+  font-weight: 700;
+  
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+`;
+
+// Railway Food Order Form Modal Styled Components
+const RailwayFormModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+`;
+
+const RailwayFormContent = styled.div`
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  
+  @media (max-width: 768px) {
+    padding: 24px;
+    max-width: 100%;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 20px;
+  }
+`;
+
+const RailwayFormClose = styled.button`
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #f0f0f0;
+    color: #38a169;
+  }
+`;
+
+const RailwayFormTitle = styled.h3`
+  color: #38a169;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+`;
+
+const RailwayFormSubtitle = styled.p`
+  color: #4a5568;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 24px;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 16px;
+  }
+`;
+
+const RailwayForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const RailwayFormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const RailwayFormLabel = styled.label`
+  color: #2d3748;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+`;
+
+const RailwayFormInput = styled.input`
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #2d3748;
+  transition: border-color 0.3s ease, box-shadow 0.3s;
+  box-sizing: border-box;
+  
+  &:focus {
+    outline: none;
+    border-color: #38a169;
+    box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
+  }
+  
+  &::placeholder {
+    color: #a0aec0;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 14px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 14px;
+  }
+`;
+
+const RailwayFormRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+`;
+
+const RailwaySubmitButton = styled.button`
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  color: white;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  
+  &:hover {
+    background: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(56, 161, 105, 0.3);
+  }
+  
+  &:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+`;
+
+const RailwayOrderButton = styled.button`
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(56, 161, 105, 0.3);
+  
+  &:hover {
+    background: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(56, 161, 105, 0.4);
+  }
+  
+  @media (max-width: 768px) {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px 24px;
+    font-size: 15px;
+    width: 100%;
+  }
+`;
+
 const CardTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
@@ -1136,6 +1806,7 @@ const TeamLocation = styled.p`
   margin: 4px 0;
 `;
 
+
 // React Component
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -1145,6 +1816,14 @@ function App() {
   const [donationData, setDonationData] = useState(null);
   const [selectedAmount, setSelectedAmount] = useState('');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [showRailwayForm, setShowRailwayForm] = useState(false);
+  const [railwayFormData, setRailwayFormData] = useState({
+    name: '',
+    phone: '',
+    pnr: '',
+    seat: '',
+    coach: ''
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1178,11 +1857,6 @@ function App() {
     setSelectedAmount(amount);
   };
 
-  const resetDonationForm = () => {
-    setDonationData(null);
-    setSelectedAmount('');
-    setSelectedPaymentMethod(null);
-  };
 
   const handlePaymentMethodSelect = (method) => {
     setSelectedPaymentMethod(method);
@@ -1192,6 +1866,96 @@ function App() {
     setDonationData(null);
     setSelectedAmount('');
     setSelectedPaymentMethod(null);
+  };
+
+  const resetDonationForm = () => {
+    setDonationData(null);
+    setSelectedAmount('');
+    setSelectedPaymentMethod(null);
+  };
+
+  const handleRailwayFormOpen = () => {
+    setShowRailwayForm(true);
+    trackButtonClick('Railway Food Order Form', 'Railway Service Section');
+  };
+
+  const handleRailwayFormClose = () => {
+    setShowRailwayForm(false);
+    setRailwayFormData({
+      name: '',
+      phone: '',
+      pnr: '',
+      seat: '',
+      coach: ''
+    });
+  };
+
+  const handleRailwayFormChange = (e) => {
+    const { name, value } = e.target;
+    setRailwayFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleRailwayFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Show loading state
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = '📤 भेजा जा रहा है...';
+    submitButton.disabled = true;
+    
+    try {
+      // Try backend API first
+      const response = await fetch('/.netlify/functions/railway-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(railwayFormData),
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        // Track successful submission
+        trackButtonClick('Railway Food Order Submitted', 'Railway Form Modal');
+        
+        // Close the form
+        handleRailwayFormClose();
+        
+        // Show success message
+        alert(`✅ आपका ऑर्डर सफलतापूर्वक भेजा गया है!\n\nऑर्डर ID: ${result.orderId}\n\nहमारी टीम जल्दी ही आपसे ${railwayFormData.phone} पर संपर्क करेगी।`);
+      } else {
+        throw new Error(result.error || 'Failed to submit order');
+      }
+      
+    } catch (error) {
+      console.error('Error submitting railway order:', error);
+      
+      // Fallback to WhatsApp message (works immediately)
+      const whatsappMessage = `🚂 *रेलवे भोजन ऑर्डर*%0A%0A*यात्री की जानकारी:*%0Aनाम: ${railwayFormData.name}%0Aफोन: ${railwayFormData.phone}%0APNR: ${railwayFormData.pnr}%0Aसीट: ${railwayFormData.seat}%0Aकोच: ${railwayFormData.coach}%0A%0Aकृपया भोजन की व्यवस्था करें।`;
+      
+      const whatsappUrl = `https://wa.me/919413900395?text=${whatsappMessage}`;
+      
+      // Track the submission
+      trackButtonClick('Railway Food Order Submitted via WhatsApp', 'Railway Form Modal');
+      
+      // Close the form
+      handleRailwayFormClose();
+      
+      // Open WhatsApp
+      window.open(whatsappUrl, '_blank');
+      
+      // Show success message
+      alert('✅ आपका ऑर्डर WhatsApp के माध्यम से भेजा जा रहा है!\n\nहमारी टीम जल्दी ही आपसे संपर्क करेगी।');
+      
+      // Reset button state
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    }
   };
 
   const galleryImages = [
@@ -1241,11 +2005,12 @@ function App() {
                   <Nav $isOpen={isNavOpen}>
                     <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="tel:9413900395" onClick={() => setIsNavOpen(false)}>रेलवे भोजन</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#team" onClick={() => setIsNavOpen(false)}>हमारी टीम</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
-                    <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
+                    <NavLink $isScrolled={isScrolled} to="/donation-categories" onClick={() => setIsNavOpen(false)}>दान श्रेणियां</NavLink>
                     <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                   </Nav>
                 </Header>
@@ -1287,11 +2052,64 @@ function App() {
                 </YouTubeWrapper>
               </Section>
               
+              <RailwayServiceSection>
+                <RailwayServiceCard>
+                  <RailwayIcon>🚂</RailwayIcon>
+                  <RailwayTitle>रेलवे स्टेशन भोजन सेवा</RailwayTitle>
+                  <RailwayDescription>
+                    हम रेलवे स्टेशनों पर यात्रियों को स्वच्छ और पौष्टिक भोजन प्रदान करते हैं। आपका सहयोग हमें इस नेक कार्य को जारी रखने में मदद करता है।
+                  </RailwayDescription>
+                  
+                  <RailwayStats>
+                    <RailwayStat>
+                      <RailwayStatNumber>500+</RailwayStatNumber>
+                      <RailwayStatLabel>दैनिक भोजन</RailwayStatLabel>
+                    </RailwayStat>
+                    <RailwayStat>
+                      <RailwayStatNumber>15</RailwayStatNumber>
+                      <RailwayStatLabel>रेलवे स्टेशन</RailwayStatLabel>
+                    </RailwayStat>
+                    <RailwayStat>
+                      <RailwayStatNumber>24/7</RailwayStatNumber>
+                      <RailwayStatLabel>सेवा उपलब्ध</RailwayStatLabel>
+                    </RailwayStat>
+                  </RailwayStats>
+
+                  <RailwayContactInfo>
+                    <RailwayContactTitle>📞 भोजन ऑर्डर के लिए संपर्क करें</RailwayContactTitle>
+                    <RailwayContactDetails>
+                      <RailwayContactItem>
+                        <ContactLabel>मुख्य नंबर:</ContactLabel>
+                        <ContactValue>9413900395</ContactValue>
+                      </RailwayContactItem>
+                      <RailwayContactItem>
+                        <ContactLabel>आपातकालीन:</ContactLabel>
+                        <ContactValue>9413900395</ContactValue>
+                      </RailwayContactItem>
+                      <RailwayContactItem>
+                        <ContactLabel>समय:</ContactLabel>
+                        <ContactValue>24 घंटे उपलब्ध</ContactValue>
+                      </RailwayContactItem>
+                    </RailwayContactDetails>
+                  </RailwayContactInfo>
+
+                  <div style={{ display: 'flex', gap: '12px', flexDirection: 'column', alignItems: 'center' }}>
+                    <RailwayOrderButton onClick={handleRailwayFormOpen}>
+                      📝 भोजन ऑर्डर करें
+                    </RailwayOrderButton>
+                    <p style={{ fontSize: '14px', color: '#666', margin: '8px 0 0 0', textAlign: 'center' }}>
+                      अपनी यात्रा की जानकारी भरें और भोजन ऑर्डर करें
+                    </p>
+                  </div>
+                </RailwayServiceCard>
+              </RailwayServiceSection>
+              
               <DonateSection id="donate">
                 <Title>दान करें</Title>
                 <Text>
                   प्रत्येक योगदान मायने रखता है। भोजन, दवा और आश्रय प्रदान करने में हमारी मदद करें। एक राशि चुनें या अपनी राशि दर्ज करें।
                 </Text>
+                
                 
                 {!donationData ? (
                   <>
@@ -1524,9 +2342,9 @@ function App() {
                   <NavLink $isScrolled={isScrolled} to="/#home" onClick={() => setIsNavOpen(false)}>होम</NavLink>
                   <NavLink $isScrolled={isScrolled} to="/#about" onClick={() => setIsNavOpen(false)}>हमारे बारे में</NavLink>
                   <NavLink $isScrolled={isScrolled} to="/#donate" onClick={() => setIsNavOpen(false)}>दान करें</NavLink>
+                  <NavLink $isScrolled={isScrolled} to="/donation-categories" onClick={() => setIsNavOpen(false)}>दान श्रेणियां</NavLink>
                   <NavLink $isScrolled={isScrolled} to="/#mission" onClick={() => setIsNavOpen(false)}>हमारा मिशन</NavLink>
                   <NavLink $isScrolled={isScrolled} to="/#gallery" onClick={() => setIsNavOpen(false)}>गैलरी</NavLink>
-                  <NavLink $isScrolled={isScrolled} to="/#stories" onClick={() => setIsNavOpen(false)}>आशा की कहानियाँ</NavLink>
                   <NavLink $isScrolled={isScrolled} to="/#contact" onClick={() => setIsNavOpen(false)}>संपर्क करें</NavLink>
                 </Nav>
               </Header>
@@ -1536,6 +2354,7 @@ function App() {
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
+          <Route path="/donation-categories" element={<DonationCategories />} />
         </Routes>
         {showBackToTop && (
           <BackToTop visible={showBackToTop} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -1548,6 +2367,88 @@ function App() {
             <CloseButton onClick={() => setSelectedImage(null)}>×</CloseButton>
           </Modal>
         )}
+        
+        {showRailwayForm && (
+          <RailwayFormModal onClick={handleRailwayFormClose}>
+            <RailwayFormContent onClick={(e) => e.stopPropagation()}>
+              <RailwayFormClose onClick={handleRailwayFormClose}>×</RailwayFormClose>
+              
+              <RailwayFormTitle>🚂 रेलवे भोजन ऑर्डर</RailwayFormTitle>
+              <RailwayFormSubtitle>
+                कृपया अपनी यात्रा की जानकारी भरें। हमारी टीम आपसे संपर्क करेगी।
+              </RailwayFormSubtitle>
+              
+              <RailwayForm onSubmit={handleRailwayFormSubmit}>
+                <RailwayFormGroup>
+                  <RailwayFormLabel>नाम *</RailwayFormLabel>
+                  <RailwayFormInput
+                    type="text"
+                    name="name"
+                    value={railwayFormData.name}
+                    onChange={handleRailwayFormChange}
+                    placeholder="आपका पूरा नाम"
+                    required
+                  />
+                </RailwayFormGroup>
+                
+                <RailwayFormGroup>
+                  <RailwayFormLabel>फोन नंबर *</RailwayFormLabel>
+                  <RailwayFormInput
+                    type="tel"
+                    name="phone"
+                    value={railwayFormData.phone}
+                    onChange={handleRailwayFormChange}
+                    placeholder="आपका मोबाइल नंबर"
+                    required
+                  />
+                </RailwayFormGroup>
+                
+                <RailwayFormGroup>
+                  <RailwayFormLabel>PNR नंबर *</RailwayFormLabel>
+                  <RailwayFormInput
+                    type="text"
+                    name="pnr"
+                    value={railwayFormData.pnr}
+                    onChange={handleRailwayFormChange}
+                    placeholder="आपका PNR नंबर"
+                    required
+                  />
+                </RailwayFormGroup>
+                
+                <RailwayFormRow>
+                  <RailwayFormGroup>
+                    <RailwayFormLabel>सीट नंबर *</RailwayFormLabel>
+                    <RailwayFormInput
+                      type="text"
+                      name="seat"
+                      value={railwayFormData.seat}
+                      onChange={handleRailwayFormChange}
+                      placeholder="सीट नंबर"
+                      required
+                    />
+                  </RailwayFormGroup>
+                  
+                  <RailwayFormGroup>
+                    <RailwayFormLabel>कोच नंबर *</RailwayFormLabel>
+                    <RailwayFormInput
+                      type="text"
+                      name="coach"
+                      value={railwayFormData.coach}
+                      onChange={handleRailwayFormChange}
+                      placeholder="कोच नंबर"
+                      required
+                    />
+                  </RailwayFormGroup>
+                </RailwayFormRow>
+                
+                <RailwaySubmitButton type="submit">
+                  📧 ऑर्डर भेजें
+                </RailwaySubmitButton>
+              </RailwayForm>
+            </RailwayFormContent>
+          </RailwayFormModal>
+        )}
+        
         <Footer>
           <FooterContent>
             <ContactSection>
