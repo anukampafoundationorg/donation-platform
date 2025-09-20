@@ -43,7 +43,7 @@ exports.handler = async (event, context) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-version': '2025-01-01',
+        'x-api-version': '2023-08-01',
         'x-client-id': CASHFREE_APP_ID,
         'x-client-secret': CASHFREE_SECRET_KEY
       }
@@ -60,6 +60,9 @@ exports.handler = async (event, context) => {
 
     if (!response.ok) {
       console.error('Cashfree API error:', responseData);
+      console.error('Request headers:', options.headers);
+      console.error('Request body:', JSON.stringify(cashfreeData, null, 2));
+      console.error('Response status:', response.status);
       return {
         statusCode: response.status,
         body: JSON.stringify({ 
@@ -75,6 +78,7 @@ exports.handler = async (event, context) => {
     
     console.log('Cashfree API Response:', responseData);
     console.log('Constructed Payment URL:', paymentUrl);
+    console.log('Order Data Sent:', JSON.stringify(cashfreeData, null, 2));
 
     return {
       statusCode: 200,

@@ -85,7 +85,7 @@ export const generateOrderData = (donationData) => {
       customer_id: `customer_${Date.now()}`,
       customer_name: donationData.name,
       customer_email: `${donationData.name.toLowerCase().replace(/\s+/g, '')}@anukampafoundation.org`,
-      customer_phone: '9999999999'
+      customer_phone: '+919999999999'
     },
     order_meta: {
       return_url: `${window.location.origin}/payment-success?order_id={order_id}`,
