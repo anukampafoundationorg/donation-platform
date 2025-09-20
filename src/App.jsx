@@ -1935,9 +1935,13 @@ function App() {
     } catch (error) {
       console.error('Error submitting railway order:', error);
       
-      // Fallback to WhatsApp message (works immediately)
+      // Fallback to WhatsApp message with mobile-optimized approach
       const whatsappMessage = `🚂 *रेलवे भोजन ऑर्डर*%0A%0A*यात्री की जानकारी:*%0Aनाम: ${railwayFormData.name}%0Aफोन: ${railwayFormData.phone}%0APNR: ${railwayFormData.pnr}%0Aसीट: ${railwayFormData.seat}%0Aकोच: ${railwayFormData.coach}%0A%0Aकृपया भोजन की व्यवस्था करें।`;
       
+      // Detect if user is on mobile
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/919413900395?text=${whatsappMessage}`;
       
       // Track the submission
@@ -1946,11 +1950,34 @@ function App() {
       // Close the form
       handleRailwayFormClose();
       
-      // Open WhatsApp
-      window.open(whatsappUrl, '_blank');
+      // Create a more user-friendly approach
+      const openWhatsApp = () => {
+        if (isMobile) {
+          // On mobile, use direct navigation - most reliable method
+          window.location.href = whatsappUrl;
+        } else {
+          // On desktop, try window.open first
+          const whatsappWindow = window.open(whatsappUrl, '_blank');
+          
+          // Check if popup was blocked after a short delay
+          setTimeout(() => {
+            if (!whatsappWindow || whatsappWindow.closed || typeof whatsappWindow.closed === 'undefined') {
+              // Popup was blocked, use direct navigation
+              window.location.href = whatsappUrl;
+            }
+          }, 100);
+        }
+      };
       
-      // Show success message
-      alert('✅ आपका ऑर्डर WhatsApp के माध्यम से भेजा जा रहा है!\n\nहमारी टीम जल्दी ही आपसे संपर्क करेगी।');
+      // Show confirmation with option to open WhatsApp
+      const userConfirmed = window.confirm('✅ आपका ऑर्डर तैयार है!\n\nWhatsApp पर भेजने के लिए "OK" दबाएं।\n\nयदि WhatsApp नहीं खुलता तो 9413900395 पर कॉल करें।');
+      
+      if (userConfirmed) {
+        openWhatsApp();
+      } else {
+        // User cancelled, show alternative contact info
+        alert('📞 वैकल्पिक संपर्क:\n\nकॉल करें: 9413900395\nया फिर से "भोजन ऑर्डर करें" बटन दबाएं।');
+      }
       
       // Reset button state
       submitButton.textContent = originalText;
@@ -2099,6 +2126,41 @@ function App() {
                     </RailwayOrderButton>
                     <p style={{ fontSize: '14px', color: '#666', margin: '8px 0 0 0', textAlign: 'center' }}>
                       अपनी यात्रा की जानकारी भरें और भोजन ऑर्डर करें
+                    </p>
+                    
+                    {/* WhatsApp Direct Link as backup */}
+                    <a 
+                      href="https://wa.me/919413900395?text=🚂%20नमस्ते!%20मुझे%20रेलवे%20स्टेशन%20पर%20भोजन%20चाहिए।%20कृपया%20मुझसे%20संपर्क%20करें।"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: 'linear-gradient(135deg, #25D366 0%, #128C7E 100%)',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: '25px',
+                        textDecoration: 'none',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)',
+                        transition: 'all 0.3s ease',
+                        marginTop: '8px'
+                      }}
+                      onMouseOver={(e) => {
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.4)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.3)';
+                      }}
+                    >
+                      📱 WhatsApp पर संपर्क करें
+                    </a>
+                    <p style={{ fontSize: '12px', color: '#888', margin: '4px 0 0 0', textAlign: 'center' }}>
+                      यदि फॉर्म काम नहीं कर रहा तो सीधे WhatsApp करें
                     </p>
                   </div>
                 </RailwayServiceCard>
