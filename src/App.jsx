@@ -91,6 +91,24 @@ const HeroWrapper = styled.div`
   width: 100%;
   overflow: hidden;
   
+  /* Dark overlay for better text readability */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+    z-index: 2;
+    pointer-events: none;
+  }
+  
   @media (max-width: 768px) {
     height: 100vh;
     min-height: 600px;
@@ -243,7 +261,9 @@ const HeroTagline = styled.h2`
   font-weight: bold;
   margin-bottom: 12px;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0px 0px 8px rgba(0, 0, 0, 0.6);
   
   @media (max-width: 768px) {
     font-size: 22px;
@@ -261,7 +281,10 @@ const HeroTitle = styled.h1`
   font-weight: bold;
   margin-bottom: 16px;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0px 0px 8px rgba(0, 0, 0, 0.6),
+    1px 1px 2px rgba(0, 0, 0, 0.9);
   line-height: 1.2;
   text-align: center;
   
@@ -282,7 +305,9 @@ const HeroText = styled.p`
   font-size: 20px;
   margin-bottom: 24px;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0px 0px 6px rgba(0, 0, 0, 0.6);
   line-height: 1.6;
   text-align: center;
   
@@ -300,11 +325,8 @@ const HeroText = styled.p`
 `;
 
 const HighlightedWord = styled.span`
-  background: rgba(0, 0, 0, 0.2);
-  padding: 2px 4px;
-  border-radius: 4px;
+  /* Removed background for cleaner look with overlay */
   margin: 0 2px;
-  backdrop-filter: blur(2px);
 `;
 
 const HeroButton = styled.a`
@@ -315,11 +337,24 @@ const HeroButton = styled.a`
   border-radius: 9999px;
   font-size: 18px;
   font-weight: 600;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(247, 158, 49, 0.4);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  
   &:hover {
     background-color: #c67e27;
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(247, 158, 49, 0.6);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 10px 28px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 8px 24px;
   }
 `;
 
@@ -572,28 +607,241 @@ const MissionCard = styled.div`
 const Footer = styled.footer`
   background-color: #f4f4f3;
   color: #2d3748;
-  padding: 24px;
-  text-align: center;
+  padding: 40px 24px 24px 24px;
   width: 100%;
   margin: 0;
+  
+  @media (max-width: 768px) {
+    padding: 32px 20px 20px 20px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 24px 16px 16px 16px;
+  }
+`;
+
+const FooterContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: left;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 24px;
+  }
+`;
+
+const ContactSection = styled.div`
+  text-align: left;
+  
+  h3 {
+    color: #f79e31;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    
+    @media (max-width: 768px) {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+  }
+`;
+
+const ContactItem = styled.div`
+  margin-bottom: 12px;
+  line-height: 1.6;
+  font-size: 16px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  strong {
+    font-weight: 600;
+    color: #2d3748;
+  }
+  
+  a {
+    color: #f79e31;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      text-decoration: underline;
+      color: #c67e27;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+`;
+
+const OrganizationName = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+`;
+
+const Address = styled.div`
+  margin-bottom: 16px;
+  line-height: 1.7;
+  color: #4a5568;
+  font-size: 16px;
+  
+  @media (max-width: 768px) {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+`;
+
+const MapLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f79e31;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    color: #c67e27;
+    transform: translateX(2px);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+`;
+
+const LinksSection = styled.div`
+  text-align: left;
+  
+  @media (max-width: 768px) {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    padding-top: 20px;
+  }
+`;
+
+const FooterBottom = styled.div`
+  max-width: 1200px;
+  margin: 32px auto 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    margin-top: 24px;
+    padding-top: 20px;
+    text-align: left;
+  }
+  
+  @media (max-width: 480px) {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+`;
+
+const FooterLinks = styled.div`
+  margin: 16px 0;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 const FooterLink = styled(Link)`
   color: #f79e31;
-  margin: 0 16px;
   text-decoration: none;
-  transition: text-decoration 0.3s;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  
   &:hover {
     text-decoration: underline;
+    color: #c67e27;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 15px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
   }
 `;
 
 const SocialMediaContainer = styled.div`
-  margin: 16px 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    margin: 16px 0;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 12px;
+    margin: 14px 0;
+  }
 `;
 
 const SocialIcon = styled.a`
@@ -1301,40 +1549,62 @@ function App() {
           </Modal>
         )}
         <Footer>
-        <p>&copy; 2025 गौशाला आश्रय। सभी अधिकार सुरक्षित।</p>
-        <div style={{ marginTop: "8px" }}>
-        <FooterLink to="/privacy-policy">
-        गोपनीयता नीति
-        </FooterLink>
-        <FooterLink to="/terms-conditions">
-        सेवा की शर्तें
-        </FooterLink>
-        </div>
-        <SocialMediaContainer>
-          <SocialIcon href="https://linkedin.com/company/anukampa-foundation" target="_blank" rel="noopener noreferrer" title="LinkedIn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://facebook.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Facebook">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://instagram.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Instagram">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-          </SocialIcon>
-          <SocialIcon href="https://twitter.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Twitter">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-            </svg>
-          </SocialIcon>
-        </SocialMediaContainer>
-        <DeveloperCredit>
-          Developed by <a href="https://www.linkedin.com/in/mohnishdev/" target="_blank" rel="noopener noreferrer">Mohnish Sharma</a>
-        </DeveloperCredit>
+          <FooterContent>
+            <ContactSection>
+              <h3>संपर्क करें</h3>
+              <OrganizationName>Anukampa Foundation</OrganizationName>
+              <Address>
+                401 Bagadiya Tower, 5th Floor<br />
+                Near Kanthal Chouraha, Ujjain 456001
+              </Address>
+              <ContactItem>
+                <strong>फोन:</strong> <a href="tel:+919413900395">9413900395</a>
+              </ContactItem>
+              <ContactItem>
+                <strong>ईमेल:</strong> <a href="mailto:Anukampafoundationorg@gmail.com">Anukampafoundationorg@gmail.com</a>
+              </ContactItem>
+              <MapLink href="https://maps.app.goo.gl/8HwqEFG5FGk2j5qj7?g_st=iw" target="_blank" rel="noopener noreferrer">
+                📍 Google Maps पर देखें
+              </MapLink>
+            </ContactSection>
+            
+            <LinksSection>
+              <h3 style={{ color: "#f79e31", marginBottom: "20px", fontSize: "24px", fontWeight: "600" }}>त्वरित लिंक</h3>
+              <FooterLinks>
+                <FooterLink to="/privacy-policy">गोपनीयता नीति</FooterLink>
+                <FooterLink to="/terms-conditions">सेवा की शर्तें</FooterLink>
+              </FooterLinks>
+              <SocialMediaContainer>
+                <SocialIcon href="https://linkedin.com/company/anukampa-foundation" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </SocialIcon>
+                <SocialIcon href="https://facebook.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Facebook">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </SocialIcon>
+                <SocialIcon href="https://instagram.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Instagram">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </SocialIcon>
+                <SocialIcon href="https://twitter.com/anukampafoundation" target="_blank" rel="noopener noreferrer" title="Twitter">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </SocialIcon>
+              </SocialMediaContainer>
+            </LinksSection>
+          </FooterContent>
+          
+          <FooterBottom>
+            <p>&copy; 2025 गौशाला आश्रय। सभी अधिकार सुरक्षित।</p>
+            <DeveloperCredit>
+              Developed by <a href="https://www.linkedin.com/in/mohnishdev/" target="_blank" rel="noopener noreferrer">Mohnish Sharma</a>
+            </DeveloperCredit>
+          </FooterBottom>
         </Footer>
         </Container>
     </>
